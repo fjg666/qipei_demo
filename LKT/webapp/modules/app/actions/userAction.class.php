@@ -513,8 +513,8 @@ class userAction extends Action {
 
         echo json_encode(array('code'=>200,'message'=>'验证码是：123456'));
         exit();
-        //$Tools = new Tools($db, $store_id, 1);
-        //$res = $Tools->generate_code($db,$mobile,$message_type,$message_type1);
+        $Tools = new Tools($db, $store_id, 1);
+        $res = $Tools->generate_code($db,$mobile,$message_type,$message_type1);
     }
     // 提现申请
     public function withdrawals(){

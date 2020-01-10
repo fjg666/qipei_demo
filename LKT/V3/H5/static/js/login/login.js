@@ -76,7 +76,7 @@ export function lkt_phone_code(type, me) {
 					console.log('获取验证码 res')
 					console.log(res)
 					var _code = {
-						200: "发送成功",
+						200: "验证码是：123456",
 						220: "短信发送频率超限！"
 					}
 					if (_code[res.data.code]) {
