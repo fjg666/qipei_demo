@@ -1,0 +1,1 @@
+ALTER TABLE `lkt_distribution_grade` CHANGE `consumer_money` `discount` DECIMAL(12,2) NULL DEFAULT '0.00' COMMENT '购物折扣';

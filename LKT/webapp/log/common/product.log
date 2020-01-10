@@ -1,0 +1,18 @@
+日期：2019-12-30 14:09:45
+AddAction::execute->452 添加商品dd成功
+日期：2019-12-30 14:10:32
+ShelvesAction::getDefaultView->67 商品ID为 528 上架成功
+日期：2020-01-02 16:59:16
+delAction::getDefaultView->83 删除商品ID为 528 的信息
+日期：2020-01-02 17:11:53
+delAction::getDefaultView->48 商品ID为522有参与插件活动，无法删除
+日期：2020-01-02 17:13:05
+delAction::getDefaultView->83 删除商品ID为 522 的信息
+日期：2020-01-02 17:13:17
+delAction::getDefaultView->56 商品ID为523有未完成的订单，无法删除
+日期：2020-01-02 17:13:22
+delAction::getDefaultView->56 商品ID为524有未完成的订单，无法删除
+日期：2020-01-02 17:15:31
+delAction::getDefaultView->83 删除商品ID为 523 的信息
+日期：2020-01-02 17:15:31
+delAction::getDefaultView->83 删除商品ID为 524 的信息

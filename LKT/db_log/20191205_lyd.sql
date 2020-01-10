@@ -1,0 +1,3 @@
+ALTER TABLE `lkt_user`
+MODIFY COLUMN `score`  int(11) UNSIGNED NULL DEFAULT 0 COMMENT '积分' AFTER `money`;
+

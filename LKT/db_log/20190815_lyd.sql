@@ -1,0 +1,1 @@
+ALTER TABLE `lkt_auction_promise` CHANGE `type` `type` CHAR(15) NOT NULL COMMENT 'Ö§¸¶·½Ê½ ';

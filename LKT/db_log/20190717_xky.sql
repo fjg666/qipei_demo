@@ -1,0 +1,1 @@
+ALTER TABLE `lkt_bargain_order` CHANGE `status` `status` INT(11) NOT NULL DEFAULT '0' COMMENT '状态 -1--失败 0--进行中 1--成功 2--付款';

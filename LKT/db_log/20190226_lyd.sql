@@ -1,0 +1,21 @@
+CREATE TABLE `lkt_third_mini_info` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `nick_name` varchar(100) DEFAULT NULL COMMENT '授权方昵称',
+  `authorizer_appid` varchar(100) DEFAULT NULL COMMENT '授权小程序appid',
+  `authorizer_access_token``` varchar(255) DEFAULT NULL COMMENT '授权方接口调用凭据（在授权的公众号或小程序具备API权限时，才有此返回值），也简称为令牌',
+  `authorizer_expires` int(11) unsigned DEFAULT NULL COMMENT '有效期（在授权的公众号或小程序具备API权限时，才有此返回值）',
+  `authorizer_refresh_token` varchar(255) DEFAULT NULL COMMENT '接口调用凭据刷新令牌',
+  `update_time` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `func_info` varchar(255) DEFAULT NULL COMMENT '授权给开发者的权限集列表',
+  `expires_time` int(11) DEFAULT NULL COMMENT '过期时间戳',
+  `company_id` varchar(100) DEFAULT NULL COMMENT '公司id',
+  `head_img` varchar(255) DEFAULT NULL COMMENT '授权方头像',
+  `verify_type_info` varchar(250) DEFAULT NULL COMMENT '授权方认证类型，-1代表未认证，0代表微信认证',
+  `user_name` varchar(255) DEFAULT NULL COMMENT '小程序的原始ID',
+  `signature` varchar(255) DEFAULT NULL COMMENT '帐号介绍',
+  `principal_name` varchar(255) DEFAULT NULL COMMENT '小程序的主体名称',
+  `business_info` varchar(255) DEFAULT NULL COMMENT '开通状况（0代表未开通，1代表已开通）',
+  `qrcode_url` varchar(255) DEFAULT NULL COMMENT '二维码图片的URL，开发者最好自行也进行保存',
+  `miniprograminfo` varchar(255) DEFAULT NULL COMMENT '根据这个字段判断是否为小程序类型授权',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='授权小程序信息表';

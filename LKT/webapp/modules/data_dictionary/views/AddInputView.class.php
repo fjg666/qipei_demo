@@ -1,0 +1,1 @@
+<?phpclass AddInputView extends SmartyView {    public function execute() {		$request = $this->getContext()->getRequest();        $this->setAttribute('data_dictionary_list',$request->getAttribute('data_dictionary_list'));        $this->setTemplate("Add.tpl");    }}?>

@@ -1,0 +1,13 @@
+{
+    "require": {
+        "php-activerecord/php-activerecord": "1.1.2",
+        "aliyuncs/oss-sdk-php":"2.3.0",
+        "topthink/think-image": "^1.0"
+    },
+    "repositories": {
+        "packagist": {
+            "type": "composer",
+            "url": "https://packagist.phpcomposer.com"
+        }
+    }
+}

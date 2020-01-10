@@ -1,0 +1,2 @@
+ALTER TABLE `lkt_order_details`
+MODIFY COLUMN `r_type`  tinyint(4) NULL DEFAULT 100 COMMENT '类型 100:不在退货退款状态0:审核中 1:同\r\n意并让用户寄回 2:拒绝(退货退款) 3:用户已快递 4:收到寄回商品,同意并退款 5：拒绝\r\n并退回商品 8:拒绝(退款) 9:同意并退款' AFTER `r_content`;

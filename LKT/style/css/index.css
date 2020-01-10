@@ -1,0 +1,287 @@
+section {}
+
+hr {
+	width: 1580px;
+	border: 1px solid #E9ECEF;
+	margin: 10% 10%;
+}
+
+.buttons button,
+.buttons2 button {
+	font-size: 16px;
+	font-family: MicrosoftYaHei;
+	font-weight: 400;
+	line-height: 100px;
+	width: 160px;
+	height: 36px;
+	border-radius: 3px;
+}
+
+.Design {
+	color: rgba(254, 254, 254, 1);
+	border: none;
+	background: rgba(40, 144, 255, 1);
+}
+
+.Delete {
+	margin-left: 20px;
+	color: rgba(106, 112, 118, 1);
+	border: 1px solid rgba(213, 219, 232, 1);
+	background: #fff;
+}
+
+.bottom {
+	float: left;
+	margin-top: 10px;
+	width: 100%;
+	height: 100%;
+	background-color: white;
+}
+
+.boxbottom {
+	margin: -5% 20%;
+}
+
+.examine {
+	width: 246px;
+	height: 246px;
+	border: 1px solid rgba(233, 236, 239, 1);
+	border-radius: 2px;
+}
+
+.examine img {
+	margin: 20%;
+}
+
+.hint {
+	/*position: relative;*/
+	float: left;
+	margin: -120px 0px 60px 58%;
+}
+
+.hint img {
+	float: left;
+	margin: 45px 0px 0 -40px;
+	width: 20px;
+	height: 20px;
+}
+
+.hint #hinttext {
+	position: absolute;
+	display: none;
+	padding: 20px;
+	width: 280px;
+	height: 110px;
+	background: rgba(255, 255, 255, 1);
+	box-shadow: 0px 2px 6px 0px rgba(13, 4, 8, 0.14);
+	border-radius: 2px;
+	word-wrap: break-word;
+	font-size: 12px;
+	font-family: MicrosoftYaHei;
+	font-weight: 400;
+	color: rgba(65, 70, 88, 1);
+	line-height: 18px;
+}
+
+.hint img:hover+#hinttext {
+	display: block;
+}
+
+#hinttext::before {
+	content: "";
+	height: 0;
+	border-top: 10px solid #fff;
+	border-right: 10px solid #ddd;
+	margin-left: -24px;
+	margin-top: 29px;
+	position: absolute;
+	transform: rotate(135deg);
+}
+
+.titile {
+	padding: 10px 18px;
+	font-size: 16rpx!important;
+	font-family: MicrosoftYaHei;
+	font-weight: 400;
+	color: rgba(65, 70, 88, 1);
+	margin-bottom: -10px;
+}
+
+.outer_page {
+	margin: 10px;
+	background: white;
+	width: 98.3%;
+	position: relative;
+}
+
+.headimg {
+	/*margin: 20vh auto;*/
+	border-radius: 50%;
+	margin-top: 200px;
+	text-align: center;
+}
+
+.headimg img {
+	width: 130px;
+	height: 130px;
+	border-radius: 50%;
+}
+
+h1 {
+	/*margin: -25vh auto;*/
+	/*width: 110px;*/
+	/*height: 18px;*/
+	font-size: 22px;
+	font-family: MicrosoftYaHei;
+	color: rgba(65, 70, 88, 1);
+	/*line-height: 100px;*/
+	text-align: center;
+}
+
+.buttons {
+	text-align: center;
+	/*padding-bottom: 400px;*/
+	padding-bottom: 200px;
+}
+
+.i_section {
+	margin-bottom: 0px!important;
+}
+
+.headimg2 {
+	border-radius: 50%;
+	margin-top: 80px;
+	text-align: center;
+}
+
+.verify {
+	font-size: 16px;
+	font-family: MicrosoftYaHei;
+	font-weight: 400;
+	color: #888F9E;
+	text-align: center;
+	margin-top: 13px;
+	margin-bottom: 30px;
+}
+
+.verify text {
+	color: #FEA95A;
+}
+
+.line {
+	margin: 80px 60px;
+	width: 100%;
+	height: 1px;
+	background: rgba(233, 236, 239, 1);
+}
+
+.buttons2 {
+	text-align: center;
+}
+
+.QR1 {
+	padding-bottom: 80px;
+}
+
+.QR1 span {
+	font-size: 16px;
+	font-family: MicrosoftYaHei;
+	font-weight: 400;
+	color: rgba(65, 70, 88, 1);
+	text-align: center;
+}
+
+.QR1 .examine {
+	margin-bottom: 80px;
+	margin: 30px auto;
+	width: 216px;
+	height: 216px;
+	border: 1px solid rgba(233, 236, 239, 1);
+	border-radius: 2px;
+}
+
+.QR1 .examine img {
+	width: 162px;
+	height: 162px;
+	margin: 7px 27px;
+}
+
+.examine text {
+	font-size: 14px;
+	font-family: MicrosoftYaHei;
+	font-weight: 400;
+	color: rgba(151, 160, 180, 1);
+	text-align: center;
+	margin-top: 15px;
+	display: inline-block;
+	width: 216px;
+}
+
+.lookCode {
+	font-size: 16px;
+	font-family: MicrosoftYaHei;
+	font-weight: 400;
+	color: rgba(65, 70, 88, 1);
+	text-align: center;
+	display: inline-block;
+	width: 100%;
+}
+
+.QR {
+	width: 220px;
+	float: left;
+}
+.QR .OQ_title{
+	text-align: center;
+	display: inline-block;
+	width: 100%;
+	margin-bottom: 30px;
+}
+
+.QR a {
+	width: 216px;
+	height: 66px;
+	padding: 16px 57px;
+	border: 1px solid rgba(233, 236, 239, 1);
+	border-radius: 2px;
+	text-align: center;
+	background: white;
+	margin-bottom: 9px;
+	display: block;
+}
+
+.QR a:hover {
+	border-color: rgba(40, 144, 255, 1);
+}
+.QR a:hover .word_span {
+	color: rgba(40, 144, 255, 1);
+}
+.QR:nth-of-type(1){
+	margin: 0px 80px;
+}
+.QR a span:nth-of-type(1){
+	font-size: 16px;
+	font-family: MicrosoftYaHei;
+	font-weight: 400;
+	color: rgba(65, 70, 88, 1);
+	display: block;
+	white-space:nowrap
+}
+.QR a span:nth-of-type(2){
+	font-size: 12px;
+	font-family: MicrosoftYaHei;
+	font-weight: 400;
+	color: gray;
+	display: block;
+	white-space:nowrap
+}
+.three_QR{
+	margin: 0px auto;
+	width: 810px;
+	display: flex;
+	justify-content: space-between;
+}
+
+.tishiPic{
+	cursor: pointer;
+}

@@ -1,0 +1,46 @@
+5 [main] INFO org.mortbay.log - Logging to org.slf4j.impl.SimpleLogger(org.mortbay.log) via org.mortbay.log.Slf4jLog
+67 [main] INFO org.mortbay.log - jetty-6.1.x
+137 [main] INFO org.mortbay.log - Extract jar:file:/alidata/www/xiaochengxu/V3/webapp/lib/sf/temp.war!/ to /webapp
+9599 [main] INFO org.mortbay.log - Opened /alidata/www/xiaochengxu/V3/webapp/lib/sf/jetty.log
+9614 [main] INFO org.mortbay.log - Started SelectChannelConnector@0.0.0.0:4040
+log4j:WARN No appenders could be found for logger (net.sf.jasperreports.extensions.ExtensionsEnvironment).
+log4j:WARN Please initialize the log4j system properly.
+log4j:WARN See http://logging.apache.org/log4j/1.2/faq.html#noconfig for more info.
+3 [main] INFO org.mortbay.log - Logging to org.slf4j.impl.SimpleLogger(org.mortbay.log) via org.mortbay.log.Slf4jLog
+54 [main] INFO org.mortbay.log - jetty-6.1.x
+121 [main] INFO org.mortbay.log - Extract jar:file:/alidata/www/xiaochengxu/V3/webapp/lib/sf/temp.war!/ to /webapp
+906 [main] INFO org.mortbay.log - Opened /alidata/www/xiaochengxu/V3/webapp/lib/sf/jetty.log
+922 [main] INFO org.mortbay.log - Started SelectChannelConnector@0.0.0.0:4040
+4 [main] INFO org.mortbay.log - Logging to org.slf4j.impl.SimpleLogger(org.mortbay.log) via org.mortbay.log.Slf4jLog
+60 [main] INFO org.mortbay.log - jetty-6.1.x
+132 [main] INFO org.mortbay.log - Extract jar:file:/alidata/www/xiaochengxu/V3/webapp/lib/sf/temp.war!/ to /webapp
+921 [main] INFO org.mortbay.log - Opened /alidata/www/xiaochengxu/V3/webapp/lib/sf/jetty.log
+941 [main] INFO org.mortbay.log - Started SelectChannelConnector@0.0.0.0:4040
+3 [main] INFO org.mortbay.log - Logging to org.slf4j.impl.SimpleLogger(org.mortbay.log) via org.mortbay.log.Slf4jLog
+56 [main] INFO org.mortbay.log - jetty-6.1.x
+125 [main] INFO org.mortbay.log - Extract jar:file:/alidata/www/xiaochengxu/V3/webapp/lib/sf/temp.war!/ to /webapp
+912 [main] INFO org.mortbay.log - Opened /alidata/www/xiaochengxu/V3/webapp/lib/sf/jetty.log
+927 [main] INFO org.mortbay.log - Started SelectChannelConnector@0.0.0.0:4040
+log4j:WARN No appenders could be found for logger (net.sf.jasperreports.extensions.ExtensionsEnvironment).
+log4j:WARN Please initialize the log4j system properly.
+log4j:WARN See http://logging.apache.org/log4j/1.2/faq.html#noconfig for more info.
+3 [main] INFO org.mortbay.log - Logging to org.slf4j.impl.SimpleLogger(org.mortbay.log) via org.mortbay.log.Slf4jLog
+54 [main] INFO org.mortbay.log - jetty-6.1.x
+114 [main] INFO org.mortbay.log - Extract jar:file:/alidata/www/xiaochengxu/V3/webapp/lib/sf/temp.war!/ to /webapp
+793 [main] INFO org.mortbay.log - Opened /alidata/www/xiaochengxu/V3/webapp/lib/sf/jetty.log
+808 [main] INFO org.mortbay.log - Started SelectChannelConnector@0.0.0.0:4040
+4 [main] INFO org.mortbay.log - Logging to org.slf4j.impl.SimpleLogger(org.mortbay.log) via org.mortbay.log.Slf4jLog
+49 [main] INFO org.mortbay.log - jetty-6.1.x
+112 [main] INFO org.mortbay.log - Extract jar:file:/alidata/www/xiaochengxu/V3/webapp/lib/sf/temp.war!/ to /webapp
+969 [main] INFO org.mortbay.log - Opened /alidata/www/xiaochengxu/V3/webapp/lib/sf/jetty.log
+989 [main] INFO org.mortbay.log - Started SelectChannelConnector@0.0.0.0:4040
+3 [main] INFO org.mortbay.log - Logging to org.slf4j.impl.SimpleLogger(org.mortbay.log) via org.mortbay.log.Slf4jLog
+47 [main] INFO org.mortbay.log - jetty-6.1.x
+110 [main] INFO org.mortbay.log - Extract jar:file:/alidata/www/xiaochengxu/V3/webapp/lib/sf/temp.war!/ to /webapp
+821 [main] INFO org.mortbay.log - Opened /alidata/www/xiaochengxu/V3/webapp/lib/sf/jetty.log
+837 [main] INFO org.mortbay.log - Started SelectChannelConnector@0.0.0.0:4040
+4 [main] INFO org.mortbay.log - Logging to org.slf4j.impl.SimpleLogger(org.mortbay.log) via org.mortbay.log.Slf4jLog
+51 [main] INFO org.mortbay.log - jetty-6.1.x
+120 [main] INFO org.mortbay.log - Extract jar:file:/alidata/www/xiaochengxu/V3/webapp/lib/sf/temp.war!/ to /webapp
+858 [main] INFO org.mortbay.log - Opened /alidata/www/xiaochengxu/V3/webapp/lib/sf/jetty.log
+873 [main] INFO org.mortbay.log - Started SelectChannelConnector@0.0.0.0:4040

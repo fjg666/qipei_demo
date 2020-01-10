@@ -1,0 +1,1 @@
+ALTER TABLE `lkt_user` ADD `clientid` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '推送客户端ID' AFTER `tt_id`;

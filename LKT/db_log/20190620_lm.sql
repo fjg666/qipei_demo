@@ -1,0 +1,1 @@
+ALTER TABLE `lkt_order` ADD `remarks` VARCHAR(500) NOT NULL DEFAULT '' COMMENT '订单备注' AFTER `comm_discount`;

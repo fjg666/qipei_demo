@@ -1,0 +1,2 @@
+ALTER TABLE `lkt_order` ADD `comm_discount` DECIMAL(10,2) NOT NULL DEFAULT '0' COMMENT '分销折扣' AFTER `bargain_id`;
+ALTER TABLE `lkt_order` ADD `is_put`  tinyint(4) NULL DEFAULT 0 COMMENT '是否发放佣金 0.否 1.是' AFTER `remarks`;
