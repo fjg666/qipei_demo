@@ -511,10 +511,10 @@ class userAction extends Action {
         $message_type = trim($request->getParameter('message_type')); // 短信类型
         $message_type1 = trim($request->getParameter('message_type1')); // 短信类别
 
-        echo json_encode(array('code'=>200,'message'=>'验证码是：123456'));
+        echo json_encode(array('code'=>202,'message'=>'验证码是：123456'));
         exit();
-        $Tools = new Tools($db, $store_id, 1);
-        $res = $Tools->generate_code($db,$mobile,$message_type,$message_type1);
+        //$Tools = new Tools($db, $store_id, 1);
+        //$res = $Tools->generate_code($db,$mobile,$message_type,$message_type1);
     }
     // 提现申请
     public function withdrawals(){
