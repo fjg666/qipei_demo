@@ -17,7 +17,7 @@
 <link rel="stylesheet" type="text/css" href="style/css/style.css" />
 {literal}
   <style type="text/css">
-
+   
      .isclick a{
         color: #ffffff;
      }
@@ -60,7 +60,7 @@
             width: 44%;
             margin: 2%!important;
         }
-
+     
       td button {
           margin:4px;
           float: left;
@@ -153,7 +153,7 @@
           box-sizing: border-box !important;
           border: unset !important;
       }
-
+	  
 	  .border-right{
 		  border-right: 1px solid #ddd!important;
 	  }
@@ -240,7 +240,7 @@
           line-height: 35px;
           cursor:pointer;
       }
-
+	  
 	  .btn_div{
 		  display: flex;align-items: center;flex-wrap: wrap;justify-content: center;
 		  width: 160px;
@@ -255,11 +255,11 @@
 		  color: #2890FF;
 		  border-color: #2890FF;
 	  }
-
+	  
 	  .add-row-ipt-box>div{
 		  width: 65px; padding-left: 3px;
 	  }
-
+	  
 	[v-cloak]{
 		display:none;
 	}
@@ -391,7 +391,7 @@
                 <li :class="item == pages?'active':''" style="padding: 0px 2px;" v-for="(item , index) in haspages" @click="set_pages(item)">
                     <a href="#">[[item]]</a>
                 </li>
-
+        
                 <li style="padding: 0px 2px;" v-if="haspages>1 && haspages != pages">
                     <a style="width:80px" @click="set_pages('next')">下一页</a>
                 </li>
@@ -492,11 +492,11 @@
 		$(function(){
 			$('body').show();
 		})
-
+		
 		// 根据框架可视高度,减去现有元素高度,得出表格高度
 		// var Vheight = $(window).height()-56-42-16-56-16-36-16-70
 		// $('.table-scroll').css('height',Vheight+'px')
-
+		
         var app = new Vue({
             el: '#app',
             delimiters:['[[',']]'],
@@ -554,7 +554,7 @@
                             me.total = res.total;
                             me.haspages = Math.ceil(me.total/me.limit);
                             me.time_count = res.time_count;
-
+							
 							// setTimeout(function(){
 							// 	$(".btn_div a").hover(function(){
 							// 		console.log(111)
@@ -877,7 +877,7 @@
                     me.activityname = '';
                     me.msstatus = '';
                 },
-
+				
             }
         })
 
@@ -912,7 +912,7 @@
             trigger: 'click',
             type: 'date'
         });
-
+		
 		$("#app").on("mouseover mouseout",".btn_div a",function(event){
 			if(event.type == "mouseover"){
 			//鼠标悬浮

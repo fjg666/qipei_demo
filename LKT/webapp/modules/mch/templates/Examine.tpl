@@ -107,12 +107,6 @@
                             </label>
                         </div>
                     </div>
-		    <div class="formListSD" id="deposit" style="margin: 2px 0px;">
-                        <div class="formTextSD"><span>保证金金额：</span></div>
-                        <div class="formInputSD">
-                            <input type="text" name="deposit" id="id_deposit"></textarea>
-                        </div>
-                    </div>
                     <div class="formListSD" id="review_result" style="margin: 2px 0px;display: none;">
                         <div class="formTextSD"><span>拒绝理由：</span></div>
                         <div class="formInputSD">
@@ -136,10 +130,8 @@
 <script type="text/javascript">
 function show(obj) {
     if (obj.value == '1') { // 通过
-	document.getElementById('deposit').style.display = ""; //保证金
         document.getElementById('review_result').style.display = "none"; // 拒绝理由隐藏
     } else {
-	document.getElementById('deposit').style.display = "none"; //保证金
         document.getElementById('review_result').style.display = ""; // 拒绝理由显示
     }
 }
@@ -192,17 +184,6 @@ document.onkeydown = function (e) {
     }
 }
 function check() {
-    var review_status = $('input[name="review_status"]').val();
-    var deposit = $("#id_deposit").val();
-    console.log(review_status);
-    console.log(deposit);
-    if (review_status == '1') { // 通过
-	if(!deposit){
-		alert('金额不能为空');
-		return false;
-	}
-    }
-
     $.ajax({
         cache: true,
         type: "POST",

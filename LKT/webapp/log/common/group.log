@@ -2,3 +2,9 @@
 ConfigAction::execute:91修改拼团配置成功！
 日期：2019-11-09 16:35:28
 ConfigAction::execute:91修改拼团配置成功！
+日期：2020-01-02 17:12:28
+MemberAction::is_market:134结束活动操作。sql：update lkt_group_open set endtime = '2020-01-02 17:12:28'  where ptgoods_id=522 and store_id = 1 and (ptstatus =0 or ptstatus =1)
+日期：2020-01-02 17:12:28
+MemberAction::is_market:149修改拼团活动状态成功！
+日期：2020-01-02 17:12:35
+MemberAction::delpro:50删除拼团活动成功！

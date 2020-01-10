@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.31, created on 2019-12-24 12:17:05
+<?php /* Smarty version 2.6.31, created on 2019-12-20 16:10:46
          compiled from ../../include_path/software_head.tpl */ ?>
 <?php echo '
 <link href="style/css/iconfont.css" rel="stylesheet">

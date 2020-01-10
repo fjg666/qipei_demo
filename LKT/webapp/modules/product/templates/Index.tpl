@@ -321,11 +321,11 @@ form .input_180{width: 180px!important}
             {/if}
         {/if}
         {if $button[4] == 1}
-            {*<a class="btn btn1 radius" id="btntaob" style="background-color:#5387DD;color: #fff;" href="index.php?module=taobao&action=Index" >
+            <a class="btn btn1 radius" id="btntaob" style="background-color:#5387DD;color: #fff;" href="index.php?module=taobao&action=Index" >
                 <div style="height: 100%;display: flex;align-items: center;">
                     <img src="images/icon1/taobaobtn.png" style="width: 14px;height: 14px;"/>&nbsp;<span>淘宝抓取</span>
                 </div>
-            </a>*}
+            </a>
 
             <a class="btn btn1 radius btn_up" id="btn2" style="background-color:#77c037;color: #fff;" href="javascript:;" onclick="operation(1,'index.php?module=product&action=Operation&id=')">
                 <div style="height: 100%;display: flex;align-items: center;">

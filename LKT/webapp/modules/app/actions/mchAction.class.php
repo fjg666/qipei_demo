@@ -7,7 +7,6 @@
 require_once(MO_LIB_DIR . '/phpqrcode.php');
 require_once(MO_LIB_DIR . '/DBAction.class.php');
 require_once(MO_LIB_DIR . '/ServerPath.class.php');
-require_once(MO_LIB_DIR . '/resultAction.class.php');
 require_once(MO_LIB_DIR . '/Tools.class.php');
 require_once(MO_LIB_DIR . '/Plugin/Plugin.class.php');
 require_once(MO_LIB_DIR . '/Plugin/mch.class.php');
@@ -74,151 +73,6 @@ class mchAction extends Action {
         return Request :: POST;
     }
 
-    
-
-    
-    //店铺列表
-    /*public function mch_list(){
-        $db = DBAction::getInstance();
-        $output = New Result;
-        $request = $this->getContext()->getRequest();
-        $store_id = trim($request->getParameter('store_id'));
-        $page = addslashes(trim($request->getParameter('page')));
-
-        $region = $request->getParameter('region');  //区域
-        $city  = $request->getParameter('city');  //汽配城
-        $level = $request->getParameter('level');  //配件等级
-        if(!isset($region) && !isset($city) && !isset($level) && !isset($store_id)){
-            $output->_jsonError('-1','参数为空！');
-        }
-
-
-        //如果没有传入page 默认传入第一页
-        if (!$page) {$page = 1;}
-        //每页条数
-        $pagesize = 20;
-        $start = ($page - 1) * $pagesize;
-
-        //根据搜索条件查询商家列表
-        $sql = "select * from lkt_mch where store_id = ".$store_id." region like '%'".$region."'%' and city like '%'".$city."'%' and accessories_level like '%'".$level."'%' LIMIT $start,$pagesize";
-        $res = $db->select($sql);
-
-        $output->_jsonResult('',$res);
-    }*/
-
-
-    //搜索店铺列表
-    public function search_mch(){
-        $db = DBAction::getInstance();
-        $output = New Result;
-        $request = $this->getContext()->getRequest();
-        $page = addslashes(trim($request->getParameter('page')));
-
-        $cid = $request->getParameter('cid');  //品牌分类id 根据品牌搜索
-        $search_type = $request->getParameter('search_type');  //搜索类型 1=根据品牌 2=根据专项件
-        $keyword = $request->getParameter('keyword'); //专项件名称  根据专项件搜索
-
-        $user_id  = $request->getParameter('user_id');  //用户id
-
-        $region = $request->getParameter('region');  //区域
-        $city  = $request->getParameter('city');  //汽配城
-        $level = $request->getParameter('level');  //配件等级
-
-        if(!isset($search_type)){
-            $output->_jsonError('-1','参数为空！');
-        }
-
-        //如果没有传入page 默认传入第一页
-        if (!$page) {$page = 1;}
-        //每页条数
-        $pagesize = 20;
-        $start = ($page - 1) * $pagesize;
-
-        $str = '';
-        if($city){
-            $str = " city like '%".$city."%'";
-        }
-
-        if($search_type == 1){
-            //查询这个分类和上级分类的店铺
-            $sql = "select * from lkt_mch where review_status = 1 and region like '%".$region."%' and accessories_level like '%".$level."%' and brand_model like '%".$cid."%'".$str;
-        }elseif($search_type == 2){
-            //查询某个区域的专项件的店铺
-            $sql = "select * from lkt_mch where review_status = 1 and region like '%".$region."%' and accessories_level like '%".$level."%' and earmarked_cate like '%".$keyword."%'".$str;
-        }
-
-        $sql .= " limit $start,$pagesize";
-        $arr = $db->select($sql);
-
-        //查询该店铺是否收藏
-        if(!empty($arr)){
-            foreach($arr as $key=>$val){
-                $sql2 = "select id from lkt_user_collection where user_id = '$user_id' and mch_id = ".$val->id." and type = 1";
-                $check = $db->select($sql2);
-                if($check){
-                    $arr[$key]['is_collection'] = 1; //已收藏
-                }else{
-                    $arr[$key]['is_collection'] = 2; //未收藏
-                }
-
-                /**/
-            }
-        }
-        $output->_jsonResult('',$arr);
-    }
-
-    //查询店铺详情
-    public function mch_detail(){
-        $db = DBAction::getInstance();
-        $output = New Result;
-        $request = $this->getContext()->getRequest();
-        $store_id = trim($request->getParameter('store_id'));
-        $mchid = $request->getParameter('mchid');  //商户id
-
-        //查询店铺信息
-        $sql = "select * from lkt_mch where id = ".$mchid;
-        $res = $db->select($sql);
-        $res['mch_info'] = json_decode(json_encode($res) , true);
-
-        //查询店铺商品
-        $sql2 = "select * from lkt_product_list where mch_id = ".$mchid." and store_id = ".$store_id;
-        $goods = $db->select($sql2);
-        $goods = json_decode(json_encode($goods), true);
-        $res['mch_info']['goods'] = $goods;
-
-        //查询店铺收藏数量
-        $sql3 = "select count(*) as number from lkt_user_collection where mch_id = ".$mchid." and type = 1";
-        $number = $db->select($sql3);
-        $res['mch_info']['number'] = $number[0]->number;
-
-        $output->_jsonResult('',$res);
-    }
-
-    //添加修改更多手机号
-    public function mch_mobile(){
-        $db = DBAction::getInstance();
-        $output = New Result;
-        $request = $this->getContext()->getRequest();
-        $store_id = trim($request->getParameter('store_id'));
-        $mchid = $request->getParameter('mchid');  //商户id
-        $mobile = $request->getParameter('mobile');  //更多手机号
-        $token = trim($request->getParameter('token'));
-
-        //对token进行验证签名,如果过期返回false,成功返回数组
-        $getPayload_test = Tools::userToken($token);
-        if($getPayload_test == false){ // 过期
-            $output->_jsonError('-1','请先登录！');
-        }
-
-        //查询店铺信息
-        $sql = "update lkt_mch set mobile_more = '".$mobile."' where store_id = '$store_id' and mch_id = ".$mchid;
-        $check = $db->update($sql);
-        if($check > 0){
-            $output->_jsonResult('添加成功！');
-        }
-    }
-
-
     // 我的店铺
     public function index(){
         $db = DBAction::getInstance();
@@ -276,7 +130,7 @@ class mchAction extends Action {
             $r_2 = $db->select($sql_2);
             $mch_data['order_num2'] = count($r_2); // 售后订单
 
-            $sql_3 = "select user_id,token from lkt_mch_browse where store_id = '$store_id' and mch_id = '$shop_id'";
+            $sql_3 = "select user_id,token from lkt_mch_browse where store_id = '$store_id' and mch_id = '$shop_id' ";
             $r_3 = $db->select($sql_3);
             $res1 = array();
             $res1_1 = array();

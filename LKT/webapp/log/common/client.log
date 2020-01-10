@@ -28,3 +28,13 @@ ModifyAction::execute->105 修改角色id为 16成功
 ModifyAction::execute->105 修改角色id为 25成功
 日期：2019-09-23 16:32:26
 ModifyAction::execute->105 修改角色id为 25成功
+日期：2019-12-20 15:46:58
+AddAction::execute->101 添加客户端失败
+日期：2019-12-20 15:58:51
+AddAction::execute->101 添加客户端失败
+日期：2019-12-20 16:07:23
+BangdingAction::execute->99 绑定商户角色，商户ID为85
+日期：2020-01-02 15:41:58
+AddAction::execute->93 添加客户端成功
+日期：2020-01-02 15:42:06
+BangdingAction::execute->99 绑定商户角色，商户ID为86

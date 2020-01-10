@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.31, created on 2019-12-20 18:01:06
+<?php /* Smarty version 2.6.31, created on 2019-12-20 15:35:13
          compiled from index1.tpl */ ?>
 <!DOCTYPE HTML>
 <html>

@@ -108,7 +108,7 @@
 					<div class="page_title">基本信息</div>
 					<div class="formContentSD">
 						<div class="formListSD">
-							<div class="formTextSD"><span class="must">*</span><span>汽配名称：</span></div>
+							<div class="formTextSD"><span class="must">*</span><span>商品标题：</span></div>
 							<div class="formInputSD">
 								<input type="text" required="required" value="{$product_title}" name="product_title">
 								
@@ -139,11 +139,11 @@
 							<div class="formInputSD"><input type="text" required="required" value="{$product_number}" name="product_number" readonly="readonly" style="background-color: #F8F8F8 !important;"></div>
 						</div>
 						<div class="formListSD">
-							<div class="formTextSD" style='height: 36px;'><span class="must">*</span><span>汽配类别：</span></div>
+							<div class="formTextSD" style='height: 36px;'><span class="must">*</span><span>商品类别：</span></div>
 							<div class="formInputSD" style='display: block;'>
 								<div class='selectDiv' onclick="select_class()">
 									<select name="product_class" class="select" readonly="readonly" style='margin-right: 0;'>
-										<option selected="selected" value="0">请选择汽配类别</option>
+										<option selected="selected" value="0">请选择商品类别</option>
 									</select>
 									<div id="div_text">
 										
@@ -157,15 +157,15 @@
 							</div>
 						</div>
 						<div class="formListSD">
-							<div class="formTextSD"><span class="must">*</span><span>汽配品牌：</span></div>
+							<div class="formTextSD"><span class="must">*</span><span>商品品牌：</span></div>
 							<div class="formInputSD" onclick="select_pinpai()">
 								<select name="brand_class" class="select" id="brand_class">
-									<option selected="selected" value="0">请选择汽配品牌</option>
+									<option selected="selected" value="0">请选择商品品牌</option>
 								</select>
 							</div>
 						</div>
 						<div class="formListSD">
-							<div class="formTextBigSD"><span class="must">*</span><span>汽配展示图：</span></div>
+							<div class="formTextBigSD"><span class="must">*</span><span>商品展示图：</span></div>
 
 							<div class="formInputSD upload-group multiple">
 								<div id="sortList" class="upload-preview-list uppre_auto">
@@ -202,7 +202,7 @@
 				</div>
 
 				<div class="formDivSD">
-					<div class="page_title">汽配属性</div>
+					<div class="page_title">商品属性</div>
 					<div class="formContentSD">
 						<div class="formListSD">
 							<div class="formTextSD"><span class="must">*</span><span>成本价：</span></div>
@@ -417,7 +417,7 @@
 									<input name="active" onchange="active_select(this)" type="radio" checked="" style="display: none;" id="active-1" class="inputC1" value="1">
 									<label for="active-1">正价</label>
 								</div>
-								{* {$Plugin_arr.res1} *}
+								{$Plugin_arr.res1}
 								<div class="ra1">
 									<input name="active" onchange="active_select(this)" type="radio" style="display: none;" id="active-6" class="inputC1" value="6">
 									<label for="active-6">会员</label>

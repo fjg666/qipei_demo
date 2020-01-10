@@ -54,3 +54,249 @@ select o.id,o.user_id,o.sNo,d.p_name,d.p_id,d.sid,d.num,o.name,o.address from lk
 1===202===Finish FHUO===update lkt_order set status='2' where sNo='GM190925095103418525'
 日期：2019-10-08 11:09:01
 【GM190925095103418525】订单发货啦！
+日期：2019-12-20 17:49:24
+授权错误信息:{"session_key":"ejQwOLnefYWMRZYNc\/MGrw==","openid":"obuJp5JMkblmRcWuM_M0VgDQ0r6w"}
+日期：2019-12-20 17:50:35
+orderAction:leave_Settlement
+日期：2019-12-20 17:50:35
+orderAction:order_list==>
+日期：2019-12-30 11:14:49
+orderAction:leave_Settlement
+日期：2019-12-30 11:14:49
+orderAction:order_list==>
+日期：2019-12-30 11:48:20
+orderAction:生成订单GM191230114820765238
+日期：2019-12-30 11:48:23
+支付类型：wallet_pay
+日期：2019-12-30 11:48:24
+orderAction:leave_Settlement
+日期：2019-12-30 11:48:24
+orderAction:order_list==>{&quot;sNo&quot;:&quot;GM191230114820765238&quot;,&quot;total&quot;:47,&quot;order_id&quot;:7112}
+日期：2019-12-30 11:48:24
+orderAction:推送开始GM191230114820765238
+日期：2019-12-30 11:48:24
+orderAction:推送结束
+日期：2019-12-30 12:10:23
+orderAction:生成订单GM191230121023047880
+日期：2019-12-30 12:10:26
+支付类型：wallet_pay
+日期：2019-12-30 12:10:27
+orderAction:leave_Settlement
+日期：2019-12-30 12:10:27
+orderAction:order_list==>{&quot;sNo&quot;:&quot;GM191230121023047880&quot;,&quot;total&quot;:85.6,&quot;order_id&quot;:7113}
+日期：2019-12-30 12:10:27
+orderAction:推送开始GM191230121023047880
+日期：2019-12-30 12:10:28
+orderAction:推送结束
+日期：2019-12-30 14:44:00
+orderAction:生成订单GM191230024400933940
+日期：2019-12-30 14:44:05
+orderAction:生成订单GM191230024405915523
+日期：2019-12-30 14:44:14
+支付类型：wallet_pay
+日期：2019-12-30 14:44:15
+orderAction:leave_Settlement
+日期：2019-12-30 14:44:15
+orderAction:order_list==>{&quot;sNo&quot;:&quot;GM191230024405915523&quot;,&quot;total&quot;:47,&quot;order_id&quot;:7115}
+日期：2019-12-30 14:44:15
+orderAction:推送开始GM191230024405915523
+日期：2019-12-30 14:44:15
+orderAction:推送结束
+日期：2019-12-30 14:45:27
+orderAction:leave_Settlement
+日期：2019-12-30 14:45:27
+orderAction:order_list==>{&quot;sNo&quot;:&quot;GM191230024400933940&quot;,&quot;total&quot;:&quot;47.00&quot;,&quot;order_id&quot;:&quot;7114&quot;}
+日期：2019-12-30 14:57:02
+支付类型：wallet_pay
+日期：2019-12-30 15:33:26
+orderAction:生成订单GM191230033326173626
+日期：2019-12-30 15:33:30
+支付类型：wallet_pay
+日期：2019-12-30 15:33:31
+orderAction:leave_Settlement
+日期：2019-12-30 15:33:31
+orderAction:order_list==>{&quot;sNo&quot;:&quot;GM191230033326173626&quot;,&quot;total&quot;:1,&quot;order_id&quot;:7117}
+日期：2019-12-30 15:33:31
+orderAction:推送开始GM191230033326173626
+日期：2019-12-30 15:33:31
+orderAction:推送结束
+日期：2019-12-30 15:35:28
+支付类型：alipay
+日期：2019-12-30 15:35:28
+alipay::::::CZ1577691328248400831
+日期：2019-12-30 15:38:34
+orderAction:生成订单GM191230033834546851
+日期：2019-12-30 15:38:39
+支付类型：wallet_pay
+日期：2019-12-30 15:38:40
+orderAction:leave_Settlement
+日期：2019-12-30 15:38:40
+orderAction:order_list==>{&quot;sNo&quot;:&quot;GM191230033834546851&quot;,&quot;total&quot;:0.02,&quot;order_id&quot;:7118}
+日期：2019-12-30 15:38:40
+orderAction:推送开始GM191230033834546851
+日期：2019-12-30 15:38:40
+orderAction:推送结束
+日期：2019-12-30 15:39:07
+otype=yb
+日期：2019-12-30 15:39:07
+update lkt_order_details set r_status='2' ,express_id='3',courier_num ='1111111111',deliver_time= ' 2019-12-30 15:39:07 ' where id in(7307) and r_status = '1'=trade=153
+日期：2019-12-30 15:39:07
+select o.id,o.user_id,o.sNo,d.p_name,d.p_id,d.sid,d.num,o.name,o.address from lkt_order as o left join lkt_order_details as d on o.sNo=d.r_sNo where o.store_id = '1' and d.id in(7307) =查询订单信息=165
+日期：2019-12-30 15:39:07
+=商品ID=518171
+日期：2019-12-30 15:39:07
+186===Finish '1' FHUO===1
+日期：2019-12-30 15:39:07
+187(==)select id from lkt_order_details where r_status in (1,2) and r_sNo='GM191230033834546851'
+日期：2019-12-30 15:39:07
+=商品ID=select id from lkt_order_details where r_status = 1 and r_sNo='GM191230033834546851'
+日期：2019-12-30 15:39:07
+1981===Finish FHUO===1
+日期：2019-12-30 15:39:07
+1===202===Finish FHUO===update lkt_order set status='2' where sNo='GM191230033834546851'
+日期：2019-12-30 15:39:07
+【GM191230033834546851】订单发货啦！
+日期：2019-12-30 15:40:53
+orderAction:leave_Settlement
+日期：2019-12-30 15:40:53
+orderAction:order_list==>{&quot;sNo&quot;:&quot;GM191230024400933940&quot;,&quot;total&quot;:&quot;47.00&quot;,&quot;order_id&quot;:&quot;7114&quot;}
+日期：2019-12-31 14:41:38
+授权错误信息:{"session_key":"LKKQxf012MKs7bXLQfL2gg==","openid":"oXhXY5QDM2fCgpPh88BU97Lu5Qec"}
+日期：2019-12-31 14:45:34
+orderAction:leave_Settlement
+日期：2019-12-31 14:45:34
+orderAction:order_list==>
+日期：2019-12-31 15:41:23
+授权错误信息:{"session_key":"sU7OxFt+XAIRiqHEkXjogQ==","openid":"oXhXY5VExGSgWelkw6VFkWgy5jOc"}
+日期：2019-12-31 15:45:17
+orderAction:leave_Settlement
+日期：2019-12-31 15:45:17
+orderAction:order_list==>
+日期：2019-12-31 15:49:26
+授权错误信息:{"session_key":"zepilejajiKZMitvjohZKw==","openid":"oXhXY5W2hJb38HEFkG46BDji68tg"}
+日期：2019-12-31 15:53:21
+orderAction:leave_Settlement
+日期：2019-12-31 15:53:21
+orderAction:order_list==>
+日期：2019-12-31 16:29:29
+授权错误信息:{"session_key":"kh9LzL8dC4FgS4sE1kgHiQ==","openid":"oXhXY5TNT9SFe_5F9R3vYk117klo"}
+日期：2019-12-31 16:45:10
+授权错误信息:{"session_key":"5ITOgxtFA4rfYpcAes6RdA==","openid":"oXhXY5ZF83GSKbPTfe65HVTVEquI"}
+日期：2019-12-31 18:02:28
+授权错误信息:{"session_key":"oBzU9IW32F4YZ2R+VVKpzg==","openid":"oXhXY5ZF83GSKbPTfe65HVTVEquI"}
+日期：2019-12-31 18:02:28
+授权错误信息:{"session_key":"oBzU9IW32F4YZ2R+VVKpzg==","openid":"oXhXY5ZF83GSKbPTfe65HVTVEquI"}
+日期：2019-12-31 18:02:29
+授权错误信息:{"session_key":"oBzU9IW32F4YZ2R+VVKpzg==","openid":"oXhXY5ZF83GSKbPTfe65HVTVEquI"}
+日期：2019-12-31 18:02:43
+授权错误信息:{"session_key":"oBzU9IW32F4YZ2R+VVKpzg==","openid":"oXhXY5ZF83GSKbPTfe65HVTVEquI"}
+日期：2019-12-31 18:39:10
+授权错误信息:{"session_key":"WoPwEp1ztfe\/RaaCsrjiKQ==","openid":"oXhXY5ZF83GSKbPTfe65HVTVEquI"}
+日期：2020-01-01 13:03:01
+授权错误信息:{"session_key":"GZ7TsAUMXwG7fBeBMVPRuA==","openid":"oXhXY5S2TJGO7bSFDfn7CgvC0yVU"}
+日期：2020-01-01 16:15:53
+授权错误信息:{"session_key":"usmlCmDq59VA2DNafNwe3Q==","openid":"oXhXY5S2TJGO7bSFDfn7CgvC0yVU"}
+日期：2020-01-01 19:12:49
+授权错误信息:{"session_key":"72qNuVRl2rdWhYF5+P2V8Q==","openid":"oXhXY5S2TJGO7bSFDfn7CgvC0yVU"}
+日期：2020-01-01 21:35:04
+授权错误信息:{"session_key":"oxZEuWdusMEfp+AuuqI6lw==","openid":"oXhXY5S2TJGO7bSFDfn7CgvC0yVU"}
+日期：2020-01-02 09:43:55
+授权错误信息:{"session_key":"ZzcWT9nO5x7zuT3wRMhjJg==","openid":"oXhXY5ZF83GSKbPTfe65HVTVEquI"}
+日期：2020-01-02 14:01:03
+授权错误信息:{"session_key":"PxqVk\/lVRVm9ovOvyUtfIw==","openid":"oXhXY5bnqmeQT0JRq2K-6_2JV2_s"}
+日期：2020-01-02 14:04:57
+orderAction:leave_Settlement
+日期：2020-01-02 14:04:57
+orderAction:order_list==>
+日期：2020-01-02 14:42:10
+orderAction:leave_Settlement
+日期：2020-01-02 14:42:10
+orderAction:order_list==>
+日期：2020-01-03 12:12:40
+授权错误信息:{"session_key":"PGR8ktDEsRnVKs6HkkJ+wQ==","openid":"oXhXY5U_qKLDi9r_VYbxEDAdJ-Qs"}
+日期：2020-01-03 12:16:41
+orderAction:leave_Settlement
+日期：2020-01-03 12:16:41
+orderAction:order_list==>
+日期：2020-01-06 10:32:37
+授权错误信息:{"session_key":"3+MDvMRA0ZSjs\/z9l5NI\/Q==","openid":"oXhXY5QDM2fCgpPh88BU97Lu5Qec"}
+日期：2020-01-06 10:34:03
+授权错误信息:{"session_key":"cGrKTuRsQ9EdqlNT5N6r0g==","openid":"oXhXY5XpXF_7V8eoTrxH3Ec_BACU"}
+日期：2020-01-06 10:35:00
+orderAction:leave_Settlement
+日期：2020-01-06 10:35:00
+orderAction:order_list==>
+日期：2020-01-06 10:36:31
+orderAction:leave_Settlement
+日期：2020-01-06 10:36:31
+orderAction:order_list==>
+日期：2020-01-06 10:38:29
+orderAction:leave_Settlement
+日期：2020-01-06 10:38:29
+orderAction:order_list==>
+日期：2020-01-06 11:34:41
+授权错误信息:{"session_key":"p\/N7Ed2zfFTFJiV+kJa4Xw==","openid":"oXhXY5UeaV3tpNgNkXnKgQWYxWTs"}
+日期：2020-01-06 11:38:37
+orderAction:leave_Settlement
+日期：2020-01-06 11:38:37
+orderAction:order_list==>
+日期：2020-01-07 10:23:35
+授权错误信息:{"session_key":"p65O3xd4mEhVozEGHSkOHw==","openid":"oXhXY5cUxkRD1Gad8amJQyPS3LQs"}
+日期：2020-01-07 15:35:00
+授权错误信息:{"session_key":"DLAQKt1\/P5NTdNxS\/qUilg==","openid":"oXhXY5cUxkRD1Gad8amJQyPS3LQs"}
+日期：2020-01-07 19:48:55
+授权错误信息:{"session_key":"83VrEaNeOuAkAhd9OgzMUA==","openid":"oXhXY5cUxkRD1Gad8amJQyPS3LQs"}
+日期：2020-01-07 22:13:53
+授权错误信息:{"session_key":"mJlTOK\/4AG+n5y2pt0XhMw==","openid":"oXhXY5cUxkRD1Gad8amJQyPS3LQs"}
+日期：2020-01-08 15:38:15
+orderAction:生成订单GM200108033815057910
+日期：2020-01-08 15:38:17
+支付类型：wallet_pay
+日期：2020-01-08 15:38:19
+orderAction:leave_Settlement
+日期：2020-01-08 15:38:19
+orderAction:order_list==>{&quot;sNo&quot;:&quot;GM200108033815057910&quot;,&quot;total&quot;:34.56,&quot;order_id&quot;:7119}
+日期：2020-01-08 15:38:19
+orderAction:推送开始GM200108033815057910
+日期：2020-01-08 15:38:19
+orderAction:推送结束
+日期：2020-01-08 15:39:49
+otype=yb
+日期：2020-01-08 15:39:49
+update lkt_order_details set r_status='2' ,express_id='57',courier_num ='444019538842',deliver_time= ' 2020-01-08 15:39:49 ' where id in(7308) and r_status = '1'=trade=153
+日期：2020-01-08 15:39:49
+select o.id,o.user_id,o.sNo,d.p_name,d.p_id,d.sid,d.num,o.name,o.address from lkt_order as o left join lkt_order_details as d on o.sNo=d.r_sNo where o.store_id = '1' and d.id in(7308) =查询订单信息=165
+日期：2020-01-08 15:39:49
+=商品ID=408171
+日期：2020-01-08 15:39:49
+186===Finish '1' FHUO===1
+日期：2020-01-08 15:39:49
+187(==)select id from lkt_order_details where r_status in (1,2) and r_sNo='GM200108033815057910'
+日期：2020-01-08 15:39:49
+=商品ID=select id from lkt_order_details where r_status = 1 and r_sNo='GM200108033815057910'
+日期：2020-01-08 15:39:49
+1981===Finish FHUO===1
+日期：2020-01-08 15:39:49
+1===202===Finish FHUO===update lkt_order set status='2' where sNo='GM200108033815057910'
+日期：2020-01-08 15:39:49
+【GM200108033815057910】订单发货啦！
+日期：2020-01-08 17:46:59
+orderAction:生成订单FX200108054659931787
+日期：2020-01-08 17:47:05
+orderAction:生成订单FX200108054705607826
+日期：2020-01-08 17:47:08
+支付类型：wallet_pay
+日期：2020-01-08 17:47:10
+orderAction:leave_Settlement
+日期：2020-01-08 17:47:10
+orderAction:order_list==>{&quot;sNo&quot;:&quot;FX200108054705607826&quot;,&quot;total&quot;:179.4,&quot;order_id&quot;:7121}
+日期：2020-01-08 17:47:10
+orderAction:推送开始FX200108054705607826
+日期：2020-01-08 17:47:10
+orderAction:推送结束
+日期：2020-01-09 15:48:53
+orderAction:leave_Settlement
+日期：2020-01-09 15:48:53
+orderAction:order_list==>
+日期：2020-01-10 10:48:32
+授权错误信息:{"session_key":"GHA+7dX+R6NIYWKl3a+0Bg==","openid":"oXhXY5ToM92yej3wxH4ouo81UMfM"}

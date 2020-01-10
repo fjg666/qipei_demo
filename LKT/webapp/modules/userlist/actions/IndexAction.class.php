@@ -44,7 +44,6 @@ class IndexAction extends Action {
         $role = $r0[0]->role; // 角色
         $sql1 = "select b.id,b.type,b.url from lkt_role_menu as a left join lkt_core_menu as b on a.menu_id = b.id where a.role_id = '$role' and b.recycle = 0 ";
         $r1 = $db->select($sql1);
-        $role_list1 = array();
         if($r1){
             foreach ($r1 as $k1 => $v1){
                 if($v1->type != '0') {
@@ -54,7 +53,6 @@ class IndexAction extends Action {
                 
             }
         }
-
         $role_list1 = array_unique($role_list1); // 一维数组去重
         if(in_array('APP',$role_list1)){
             $is_app = 1;

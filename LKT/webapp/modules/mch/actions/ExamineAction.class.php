@@ -47,7 +47,6 @@ class ExamineAction extends Action {
         $user_id = trim($request->getParameter('user_id'));
         $review_status = trim($request->getParameter('review_status'));
         $review_result = trim($request->getParameter('review_result'));
-        $deposit = trim($request->getParameter('deposit')); //保证金
 
         $sql0 = "select * from lkt_mch_config where store_id = '$store_id'";
         $r0 = $db -> select($sql0);
@@ -57,7 +56,7 @@ class ExamineAction extends Action {
             $logo = '';
         }
 
-        $rew = " deposit = '$deposit',logo = '$logo',review_status = '$review_status',review_result = '$review_result',review_time = CURRENT_TIMESTAMP ";
+        $rew = " logo = '$logo',review_status = '$review_status',review_result = '$review_result',review_time = CURRENT_TIMESTAMP ";
         if($review_status == 1){
             $res = '通过';
         }else{

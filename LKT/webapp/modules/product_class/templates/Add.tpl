@@ -72,12 +72,6 @@ select {
                             <input type="text" name="class[pname]" value="" datatype="*6-18" placeholder="请输入分类名称" />
                         </div>
                     </div>
-		    <div class="">
-                        <div class=""><span class="c-red" style="padding-left: 44px;">*</span><span>分类类型：</span></div>
-                        <div class="" style="position: absolute;top:74px;left: 191px">
-			    <input  type="radio" name="class[type]" value="1" checked="checked">品牌车型  <input type="radio" name="class[type]" value="2">专项件
-                        </div>
-                    </div>
                     <div class="formListSD" >
                         <div class="formTextSD"><span class="c-red">*</span><span>分类级别：</span></div>
                         <div class="formInputSD">
@@ -148,7 +142,7 @@ select {
 			$('.title_zi').text('添加子类')
             $(".slevel_box").show();
             $("#slevel_box").empty();
-            var res = '<div class="formTextSD"><span class="c-red" ></span><span>上级分类：</span></div>';
+            var res = '<div class="formTextSD"><span class="c-red"></span><span>上级分类：</span></div>';
             $("#slevel_box").append(res);
             for (var i = 0; i < arr.length; i++) {
                 var tid = i + 1;

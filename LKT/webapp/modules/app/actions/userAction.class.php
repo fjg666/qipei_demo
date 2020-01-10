@@ -1,7 +1,5 @@
 <?php
 require_once(MO_LIB_DIR . '/DBAction.class.php');
-require_once(MO_LIB_DIR . '/resultAction.class.php');
-require_once(MO_LIB_DIR . '/curlAction.class.php');
 require_once(MO_LIB_DIR . '/aliyun-dysms-php-sdk-lite/demo/sendSms.php');
 require_once(MO_LIB_DIR . '/ServerPath.class.php');
 require_once(MO_LIB_DIR . '/Tools.class.php');
@@ -10,9 +8,6 @@ require_once(MO_LIB_DIR . '/Plugin/sign.class.php');
 require_once(MO_LIB_DIR . '/Plugin/coupon.class.php');
 
 class userAction extends Action {
-
-    private $app_id = 'wx87a91f823315ec25';
-    private $app_secret = '9612ee8e6f88d8878ba2de91ee49d355';
 
     public function getDefaultView() {
         $request = $this->getContext()->getRequest();
@@ -24,27 +19,22 @@ class userAction extends Action {
 
     public function execute(){
         $db = DBAction::getInstance();
-        $output = New Result;
         $request = $this->getContext()->getRequest();
         $app = addslashes(trim($request->getParameter('app')));
         $store_id = trim($request->getParameter('store_id'));
         $store_type = trim($request->getParameter('store_type'));
         $access_id = trim($request->getParameter('access_id')); // 授权id
-        $token = trim($request->getParameter('token')); // 授权id
 
         if($app != 'index' && $app != 'Verification' && $app != 'about_us' && $app != 'secret_key'){
-            if(!empty($token)){ // 存在
-                /*$getPayload_test = Tools::verifyToken($db,$store_id,$store_type,$access_id); //对token进行验证签名,如果过期返回false,成功返回数组
+            if(!empty($access_id)){ // 存在
+                $getPayload_test = Tools::verifyToken($db,$store_id,$store_type,$access_id); //对token进行验证签名,如果过期返回false,成功返回数组
                 if($getPayload_test == false){ // 过期
                     echo json_encode(array('code' => 230, 'message' => '请登录！'));
                     exit;
-                }*/
-                $getPayload_test = Tools::userToken($token);
-                if($getPayload_test == false){ // 过期
-                    $output->_jsonError('-1','请先登录！');
                 }
             }else{
-                $output->_jsonError('-1','请先登录！');
+                echo json_encode(array('code' => 230, 'message' => '请登录！'));
+                exit;
             }
         }
         $this->$app();
@@ -54,297 +44,6 @@ class userAction extends Action {
     public function getRequestMethods(){
         return Request :: POST;
     }
-
-    // 点击收藏
-    public function add_collect(){
-        $db = DBAction::getInstance();
-        $output = New Result;
-        $request = $this->getContext()->getRequest();
-        $store_id = trim($request->getParameter('store_id'));
-
-        $mch_id  = trim($request->getParameter('mch_id')); // 店铺id
-        $pro_id  = trim($request->getParameter('pro_id')); // 商品id
-        $user_id = trim($request->getParameter('user_id')); // 用户id
-        $token = trim($request->getParameter('token'));
-        $type = trim($request->getParameter('type')); // 1=收藏店铺 2=商品收藏
-
-        //对token进行验证签名,如果过期返回false,成功返回数组
-        $getPayload_test = Tools::userToken($token);
-        if($getPayload_test == false){ // 过期
-            $output->_jsonError('-1','请先登录！');
-        }
-
-        if($type == 1){
-            $sql = "select * from lkt_user_collection where store_id = '$store_id' and user_id = '$user_id' and mch_id = '$mch_id'";
-            $r = $db->select($sql);
-        }else{
-            $sql = "select * from lkt_user_collection where store_id = '$store_id' and user_id = '$user_id' and p_id = '$pro_id'";
-            $r = $db->select($sql);
-        }
-
-        if ($r) {
-            $output->_jsonError('-1','已收藏！');
-        }
-
-
-        // 在收藏表里添加一条数据
-        $sql = "insert into lkt_user_collection(store_id,user_id,p_id,add_time,mch_id,type) values('$store_id','$user_id','$pro_id',CURRENT_TIMESTAMP,'$mch_id',$type)";
-        $r = $db->insert($sql,'last_insert_id');
-        if($r > 0){
-            $output->_jsonResult('收藏成功！');
-        }else{
-            $output->_jsonResult('收藏失败，网络繁忙！');
-        }
-    }
-
-    // 收藏列表
-    public function collection_list(){
-        $db = DBAction::getInstance();
-        $output = New Result;
-        $request = $this->getContext()->getRequest();
-        $store_id = trim($request->getParameter('store_id'));
-
-        $user_id = trim($request->getParameter('user_id'));
-        $token = trim($request->getParameter('token'));
-
-        //对token进行验证签名,如果过期返回false,成功返回数组
-        $getPayload_test = Tools::userToken($token);
-        if($getPayload_test == false){ // 过期
-            $output->_jsonError('-1','请先登录！');
-        }
-
-
-        $sql = "select * from user_id = ".$user_id." and store_id = ".$store_id." order by add_time desc";
-        $arr = $db->select($sql);
-        
-        if($arr){
-            $output->_jsonResult('',$arr);
-        }else{
-            $output->_jsonError('-1','暂无数据！');
-        }
-
-    }
-
-    // 取消收藏
-    public function removeCollet(){
-        $db = DBAction::getInstance();
-        $output = New Result;
-        $request = $this->getContext()->getRequest();
-        $store_id = trim($request->getParameter('store_id'));
-
-        $mch_id  = $request->getParameter('mch_id');  // 店铺id
-        $pro_id  = $request->getParameter('pro_id');  // 店铺id
-        $user_id = $request->getParameter('user_id'); // 用户id
-        $token = trim($request->getParameter('token'));
-        $type = trim($request->getParameter('type')); // 1=收藏店铺 2=商品收藏
-
-        //对token进行验证签名,如果过期返回false,成功返回数组
-        $getPayload_test = Tools::userToken($token);
-        if($getPayload_test == false){ // 过期
-            $output->_jsonError('-1','请先登录！');
-        }
-
-        if($type == 1){
-            $sql = "delete from lkt_user_collection where store_id = '$store_id' and mch_id = '$mch_id' and user_id = '$user_id' and type = 1";
-            $r = $db->delete($sql);
-        }else{
-            $sql = "delete from lkt_user_collection where store_id = '$store_id' and p_id = '$pro_id' and user_id = '$user_id' and type = 2";
-            $r = $db->delete($sql);
-        }
-
-        if($r > 0){
-            $output->_jsonResult('取消成功！');
-        }else{
-            $output->_jsonError('-1','取消失败！');
-        }
-    }
-
-    //用户浏览店铺记录添加
-    public function user_record(){
-        $db = DBAction::getInstance();
-        $output = New Result;
-        $request = $this->getContext()->getRequest();
-
-        $mch_id  = $request->getParameter('mch_id');  // 店铺id
-        //$user_id = $request->getParameter('user_id'); // 用户id
-        $token = trim($request->getParameter('token'));
-
-        //对token进行验证签名,如果过期返回false,成功返回数组
-        $getPayload_test = Tools::userToken($token);
-        if($getPayload_test == false){ // 过期
-            $output->_jsonError('-1','请先登录！');
-        }
-
-        $sql = "update lkt_mch set contact = contact + 1 where mch_id = ".$mch_id;
-        $check = $db->update($sql);
-        if($check > 0){
-            $output->_jsonResult('添加成功');
-        }
-    }
-
-    //修改用户openid
-    public function update_openid(){
-        $db = DBAction::getInstance();
-        $output = New Result;
-        $request = $this->getContext()->getRequest();
-
-        $openid  = $request->getParameter('openid');  // 微信openid
-        $user_id = $request->getParameter('user_id'); // 用户id
-        $token = trim($request->getParameter('token'));
-
-        //对token进行验证签名,如果过期返回false,成功返回数组
-        $getPayload_test = Tools::userToken($token);
-        if($getPayload_test == false){ // 过期
-            $output->_jsonError('-1','请先登录！');
-        }
-
-        $sql = "update lkt_user set wx_id = '".$openid."' where user_id = '".$user_id."'";
-        $check = $db->update($sql);
-        if($check > 0){
-            $output->_jsonResult('修改成功');
-        }
-    }
-
-    //查询汽车VIN码
-    public function vin_query(){
-        $curl   = New Curl;
-        $output = New Result;
-        $request = $this->getContext()->getRequest();
-        $vin  = $request->getParameter('vin');  // vin码
-
-        $appkey = 'eba79b700026892d';//你的appkey
-        //$vin = 'LSVAL41Z882104202';
-        $url = "https://api.jisuapi.com/vin/query?appkey=$appkey&vin=$vin";
-        $result = $curl->curlOpen($url, ['ssl'=>true]);
-        $jsonarr = json_decode($result, true);
-
-        if($jsonarr['status'] != 0) {
-            $output->_jsonError('-1',$jsonarr['msg']);
-        }else{
-            $output->_jsonResult('',$jsonarr['result']);
-        }
-    }
-
-    //修改个人信息
-    public function update_info(){
-        $db = DBAction::getInstance();
-        $output = New Result;
-        $request = $this->getContext()->getRequest();
-        $store_id = trim($request->getParameter('store_id'));
-
-        $user_id = $request->getParameter('user_id'); // 用户id
-        $token = $request->getParameter('token');
-        $nickname = $request->getParameter('nickname');
-        $birthday = $request->getParameter('birthday');
-
-        //对token进行验证签名,如果过期返回false,成功返回数组
-        $getPayload_test = Tools::userToken($token);
-        if($getPayload_test == false){ // 过期
-            $output->_jsonError('-1','请先登录！');
-        }
-
-        //头像
-        if(!empty($_FILES['avatar'])){
-
-            // 查询配置表信息
-            $sql = "select * from lkt_config where store_id = '$store_id'";
-            $r = $db->select($sql);
-            $uploadImg_domain = $r[0]->uploadImg_domain;
-            // 图片上传位置
-            $uploadImg = "../LKT/images/avatar/";
-            $avatar_image = ServerPath::file_upload2($_FILES['avatar'],$store_id,$uploadImg,$uploadImg_domain);
-
-            if($avatar_image == false){
-                $output->_jsonError('-1','设置失败！');
-            }else{
-                $sql = "update lkt_user set headimgurl = '$avatar_image' where id = ".$user_id;
-                $db->update($sql);
-                $output->_jsonResult('设置成功！');
-            }
-        }
-
-
-        if($nickname){
-            $sql = "update lkt_user set user_name = '$nickname' where id = ".$user_id;
-            $check = $db->update($sql);
-            if($check > 0){
-                $output->_jsonResult('设置成功');
-            }else{
-                $output->_jsonError('-1','设置失败');
-            }
-        }
-
-        if($birthday) {
-            $sql = "update lkt_user set birthday = '$birthday' where id = ".$user_id;
-            $r = $db->update($sql);
-            if ($r > 0) {
-                $output->_jsonResult('设置成功');
-            } else {
-                $output->_jsonError('-1','设置失败');
-            }
-        }
-    }
-
-
-    /**
-     * 获取授权token网页授权
-     *
-     * @param string $code 通过get_authorize_url获取到的code
-     */
-    public function get_openid()
-    {
-        $db = DBAction::getInstance();
-        $output = New Result;
-        $request = $this->getContext()->getRequest();
-        $code = trim($request->getParameter('code'));
-
-        $appid = $this->app_id;
-        $appsecret = $this->app_secret;
-        $token_url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=" . $appid . "&secret=" . $appsecret . "&code=" . $code . "&grant_type=authorization_code";
-
-        $token_data = $this->http($token_url);
-
-        if ($token_data[0] == 200) {
-            $ar = json_decode($token_data[1], TRUE);
-            $output->_jsonResult('',$ar);
-        }
-        $output->_jsonError('-1',$token_data[1]);
-    }
-    public function http($url, $method = '', $postfields = null, $headers = array(), $debug = false)
-    {
-        $ci = curl_init();
-        /* Curl settings */
-        curl_setopt($ci, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
-        curl_setopt($ci, CURLOPT_CONNECTTIMEOUT, 30);
-        curl_setopt($ci, CURLOPT_TIMEOUT, 30);
-        curl_setopt($ci, CURLOPT_RETURNTRANSFER, true);
-        switch ($method) {
-            case 'POST':
-                curl_setopt($ci, CURLOPT_POST, true);
-                if (!empty($postfields)) {
-                    curl_setopt($ci, CURLOPT_POSTFIELDS, $postfields);
-                    $this->postdata = $postfields;
-                }
-                break;
-        }
-        curl_setopt($ci, CURLOPT_URL, $url);
-        curl_setopt($ci, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ci, CURLINFO_HEADER_OUT, true);
-        $response = curl_exec($ci);
-        $http_code = curl_getinfo($ci, CURLINFO_HTTP_CODE);
-        if ($debug) {
-            echo "=====post data======\r\n";
-            var_dump($postfields);
-            echo '=====info=====' . "\r\n";
-            print_r(curl_getinfo($ci));
-            echo '=====$response=====' . "\r\n";
-            print_r($response);
-        }
-        curl_close($ci);
-        return array($http_code, $response);
-    }
-
-
     // 请求我的数据
     public function index(){
         $db = DBAction::getInstance();
@@ -369,6 +68,7 @@ class userAction extends Action {
         $plugin = array();
         $Plugin_arr = new Plugin();
         $Plugin_arr1 = $Plugin_arr->front_Plugin($db,$store_id);
+
         foreach ($Plugin_arr1 as $k => $v){
             if($k == 'sign' && $v == 1){
                 $sign = new sign();
@@ -382,7 +82,6 @@ class userAction extends Action {
                 $plugin['mch'] = 1;
             }
         }
-
         $sql0 = "select * from lkt_admin where store_id = '$store_id' and type = 1";
         $r0 = $db->select($sql0);
         $permission1 = explode(',',$r0[0]->permission);

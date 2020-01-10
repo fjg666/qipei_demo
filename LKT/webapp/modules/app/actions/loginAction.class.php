@@ -1,6 +1,5 @@
 <?php
 require_once(MO_LIB_DIR . '/DBAction.class.php');
-require_once(MO_LIB_DIR . '/resultAction.class.php');
 require_once(MO_LIB_DIR . '/ShowPager.class.php');
 require_once(MO_LIB_DIR . '/Tools.class.php');
 require_once(MO_LIB_DIR . '/ServerPath.class.php');
@@ -10,14 +9,11 @@ require_once(MO_LIB_DIR . '/lktpay/bdpay/BDUtils.php');
 require_once(MO_LIB_DIR . '/alipay/AlipayTools.class.php');
 require_once(MO_LIB_DIR . '/LKTConfigInfo.class.php');
 require_once(MO_LIB_DIR . '/LaiKeLogUtils.class.php');
-require_once(MO_LIB_DIR . '/RedisClusters.php');
-require_once(MO_LIB_DIR . '/sendAction.class.php');
 
 class loginAction extends Action {
 
     public function getDefaultView() {
         $db = DBAction::getInstance();
-        $output = New Result;
         $request = $this->getContext()->getRequest();
         $app = addslashes(trim($request->getParameter('app')));
         $this->$app();
@@ -26,7 +22,6 @@ class loginAction extends Action {
 
     public function execute(){
         $db = DBAction::getInstance();
-        $output = New Result;
         $request = $this->getContext()->getRequest();
         $app = addslashes(trim($request->getParameter('app')));
         $this->$app();
@@ -36,530 +31,6 @@ class loginAction extends Action {
     public function getRequestMethods(){
         return Request :: POST;
     }
-
-    //短信发送
-    public function send_sms(){
-        //$db = DBAction::getInstance();
-        $output = New Result;
-        $redis  = new RedisClusters();
-        $clapi  = new ChuanglanSmsApi();
-        $request = $this->getContext()->getRequest();
-        $mobile  = $request->getParameter('mobile');  //联系电话
-        if(!isset($mobile)){
-            $output->_jsonError('-1','参数为空！');
-        }
-
-        //生成随机数（4位数）
-        $code = mt_rand(1000,9999);
-
-        //设置您要发送的内容：其中“【】”中括号为运营商签名符号，多签名内容前置添加提交
-        $result = $clapi->sendSMS($mobile,'【汽配无忧】您的验证码是：'.$code.'，请不要把验证码泄露给其他人。');
-
-        $arr = json_decode($result,true);
-        if($arr['code'] == 0){
-            //将验证码存入redis
-            $redis->connect();
-            $redis->set($mobile,$code,60);
-            $redis->close();
-
-            $output->_jsonResult('发送成功！');
-        }else{
-            $output->_jsonError('-1',$arr['errorMsg']);
-        }
-    }
-
-    //修理店（用户）注册
-    public function user_register(){
-        $db = DBAction::getInstance();
-        $output = New Result;
-        $redis  = new RedisClusters();
-        $request = $this->getContext()->getRequest();
-
-        $store_id   = addslashes(trim($request->getParameter('store_id'))); // 商城id
-        $user_name  = $request->getParameter('user_name'); //修理店名称
-        $project    = $request->getParameter('project'); //主营项目
-        $station_number = $request->getParameter('station_number'); //工位数量
-        $region     = $request->getParameter('region');  //所属区域
-        $address    = $request->getParameter('address'); //详细地址
-        $name       = $request->getParameter('name');  //联系人
-        $mobile     = $request->getParameter('mobile');  //联系电话
-        $verify     = $request->getParameter('verify');  //验证码
-        $password   = $request->getParameter('password');  //密码
-        $confirm_password = $request->getParameter('confirm_password');  //确认密码
-
-        //判断账号是否注册
-        $checkZh = "select id from lkt_user where store_id = '$store_id' and zhanghao = '$mobile'";
-        $r0 = $db->select($checkZh);
-        if($r0){
-            $output->_jsonError('-1','该账号已存在!');
-        }
-
-        //判断手机号是否注册
-        $checkMobile = "select id from lkt_user where store_id = '$store_id' and mobile = '$mobile'";
-        $r1 = $db->select($checkMobile);
-        if($r1){
-            $output->_jsonError('-1','该手机号码已注册,请登录!');
-        }
-
-        //判断验证码是否正确
-        $redis->connect();
-        $yzm = $redis->get($mobile);
-        $redis->close();
-        if($yzm != $verify){
-            $output->_jsonError('-1','短信验证码错误！');
-        }
-
-
-        //判断密码是否一致
-        if($password != $confirm_password){
-            $output->_jsonError('-1','密码不一致！');
-        }
-
-        $sql = "insert into lkt_user(store_id,user_name,project,station_number,region,address,real_name,mobile,zhanghao,mima,source) values('$store_id','$user_name','$project','$station_number','$region','$address','$name','$mobile','$mobile','$password',2)";
-        $uid = $db->insert($sql,'last_insert_id');
-
-        if($uid > 0){
-            //更新user_id.获取数据库最大一条id 然后加一，存入数据库
-            $sql2 = "select max(id) as userid from lkt_user where 1=1";
-            $r = $db->select($sql2);
-            $rr = $r[0]->userid;
-            $user_id = 'user'.($rr+1);//新注册的用户user_id
-
-            $sql_1 = "update lkt_user set user_id = '$user_id' where id = '$uid' and store_id = '$store_id'";
-            $db->update($sql_1);
-
-            $msg['uid'] = $uid;
-            $output->_jsonResult('注册成功！',$msg);
-        }else{
-            $output->_jsonError('-1','注册失败！');
-        }
-    }
-
-    //图片上传
-    public function image_upload(){
-        $db = DBAction::getInstance();
-        $output = New Result;
-
-        $request = $this->getContext()->getRequest();
-
-        $store_id   = addslashes(trim($request->getParameter('store_id'))); // 商城id
-        $name  = $request->getParameter('name'); //图片对应名称
-        $id    = $request->getParameter('id'); //id
-        $type    = $request->getParameter('type'); //注册类型  1=修理店 2=汽配商
-
-        // 查询配置表信息
-        $sql = "select * from lkt_config where store_id = '$store_id'";
-        $r = $db->select($sql);
-
-        $uploadImg_domain = $r[0]->uploadImg_domain;
-
-        //
-        if(!empty($_FILES[$name])){
-
-            // 图片上传位置
-            $uploadImg = "../LKT/images/upload/";
-            $image = ServerPath::file_upload2($_FILES[$name],$store_id,$uploadImg,$uploadImg_domain);
-
-            if($image == false){
-                $output->_jsonError('-1','请上传照片！');
-            }else{
-                $url = preg_replace('/.*\//', '', $image);
-            }
-        }else{
-            $output->_jsonError('-1','请上传照片！');
-        }
-
-        if($type == 1){
-            $sql = "update lkt_user set ".$name." = '$url' where user_id = '$id'";
-        }elseif($type == 2){
-            $sql = "update lkt_mch set ".$name." = '$url' where id = '$id'";
-        }
-        $check = $db->update($sql);
-
-        if($check > 0){
-            $output->_jsonResult('上传成功');
-        }
-    }
-
-
-    //汽配商（商家）注册
-    public function mch_register(){
-        $db = DBAction::getInstance();
-        $output = New Result;
-        $redis  = new RedisClusters();
-        $request = $this->getContext()->getRequest();
-
-        $store_id   =  addslashes(trim($request->getParameter('store_id'))); // 商城id
-        $store_name  = $request->getParameter('store_name'); //修理店名称
-        $shop_information    = $request->getParameter('shop_information'); //主营业务
-        $shop_range = $request->getParameter('shop_range'); //经营范围
-        $brand_model     = json_decode($request->getParameter('brand_model'), true);  //品牌车型 json格式
-
-        //循环判断用户选择的品牌车型
-        $cid_str = '';
-        foreach($brand_model as $key => $val){
-            foreach($val as $k => $v){
-                if($v == 'all'){
-                    $id = $k;
-                    $brandSql = "select cid from lkt_product_class where sid = ".$id;
-                    $brand = $db->select($brandSql);
-
-                    foreach($brand as $keys => $vals){
-                        $cid_str .= $vals.",";
-                    }
-                }else{
-                    $cid_str .= $v;
-                }
-            }
-        }
-        $cid_str = rtrim($cid_str, ',');
-
-        $accessories_level     = $request->getParameter('accessories_level');  //配件等级
-        $business_type     = $request->getParameter('business_type');  //业务类型
-        $stock     = $request->getParameter('stock');  //库存规模
-        $region     = $request->getParameter('region');  //所属区域
-        $city     = $request->getParameter('city');  //汽配城
-        $address    = $request->getParameter('address'); //详细地址
-        $name       = $request->getParameter('realname');  //联系人姓名
-        $mobile     = $request->getParameter('mobile');  //联系电话
-        $verify     = $request->getParameter('verify');  //验证码
-        $password   = $request->getParameter('password');  //密码
-        $confirm_password = $request->getParameter('confirm_password');  //确认密码
-
-        if(!isset($store_id) && !isset($store_name) && !isset($shop_information) && !isset($shop_range) && !isset($brand_model) && !isset($accessories_level) && !isset($business_type) && !isset($stock) && !isset($region) && !isset($city) && !isset($address) && !isset($realname) && !isset($mobile) && !isset($verify) && !isset($password) && !isset($confirm_password)){
-            $output->_jsonError('-1','参数为空！');
-        }
-
-        //判断手机号是否注册
-        $checkMobile = "select id from lkt_user where store_id = '$store_id' and mobile = '$mobile'";
-        $r1 = $db->select($checkMobile);
-        if($r1){
-            $output->_jsonError('-1','该手机号码已注册,请登录!');
-        }
-
-        //判断验证码是否正确
-        $redis->connect();
-        $yzm = $redis->get($mobile);
-        $redis->close();
-        if($yzm != $verify){
-            $output->_jsonError('-1','短信验证码错误！');
-        }
-
-        //判断密码是否一致
-        if($password != $confirm_password){
-            $output->_jsonError('-1','密码不一致！');
-        }
-
-        // 查询配置表信息
-        /*$sql = "select * from lkt_config where store_id = '$store_id'";
-        $r = $db->select($sql);
-
-        $uploadImg_domain = $r[0]->uploadImg_domain;
-
-        //营业执照照片
-        if(!empty($_FILES['business_license'])){
-
-            // 图片上传位置
-            $uploadImg = "../LKT/images/upload/";
-            $business_license = ServerPath::file_upload2($_FILES['cashier_image'],$store_id,$uploadImg,$uploadImg_domain);
-
-            if($business_license == false){
-                $output->_jsonError('-1','请上传门店照片！');
-            }else{
-                $business_license = preg_replace('/.*\//', '', $business_license);
-            }
-        }else{
-            $output->_jsonError('-1','请上传门店照片！');
-        }
-
-        //门店照片
-        if(!empty($_FILES['store_image'])){
-
-            // 图片上传位置
-            $uploadImg = "../LKT/images/upload/";
-            $store_image = ServerPath::file_upload2($_FILES['station_image'],$store_id,$uploadImg,$uploadImg_domain);
-
-            if($store_image == false){
-                $output->_jsonError('-1','请上传工位照片！');
-            }else{
-                $store_image = preg_replace('/.*\//', '', $store_image);
-            }
-        }else{
-            $output->_jsonError('-1','请上传工位照片！');
-        }
-
-        //收银台照片（前台）
-        if(!empty($_FILES['cashier_image'])){
-
-            // 图片上传位置
-            $uploadImg = "../LKT/images/upload/";
-            $cashier_image = ServerPath::file_upload2($_FILES['storeroom_image'],$store_id,$uploadImg,$uploadImg_domain);
-
-            if($cashier_image == false){
-                $output->_jsonError('-1','请上传工位照片！');
-            }else{
-                $cashier_image = preg_replace('/.*\//', '', $cashier_image);
-            }
-        }else{
-            $output->_jsonError('-1','请上传工位照片！');
-        }
-
-        //库房照片
-        if(!empty($_FILES['storeroom_image'])){
-
-            // 图片上传位置
-            $uploadImg = "../LKT/images/upload/";
-            $storeroom_image = ServerPath::file_upload2($_FILES['work_image'],$store_id,$uploadImg,$uploadImg_domain);
-
-            if($storeroom_image == false){
-                $output->_jsonError('-1','请上传工作照片！');
-            }else{
-                $storeroom_image = preg_replace('/.*\//', '', $storeroom_image);
-            }
-        }else{
-            $output->_jsonError('-1','请上传工作照片！');
-        }*/
-        $db->begin(); //开始事务
-
-        //添加用户
-        $sql = "insert into lkt_user(store_id,real_name,mobile,zhanghao,mima,source) values('$store_id','$name','$mobile','$mobile','$password',2)";
-        $uid = $db->insert($sql,'last_insert_id');
-        $db->commit(); //提交事务
-
-        if($uid > 0){
-            $add_time = date('Y-m-d H:i:s');
-            //$sql = "insert into lkt_mch(store_id,user_id,name,shop_information,shop_range,realname,brand_model,tel,accessories_level,business_type,stock,region,address,city,business_license,store_image,cashier_image,storeroom_image,add_time) values($store_id,'$uid','$store_name','$shop_information','$shop_range','$name','$cid_str','$mobile','$accessories_level','$business_type','$stock','$region','$address','$city','$business_license','$store_image','$cashier_image','$storeroom_image','$add_time')";
-            $sql = "insert into lkt_mch(store_id,user_id,name,shop_information,shop_range,realname,brand_model,tel,accessories_level,business_type,stock,region,address,city,add_time) values($store_id,'$uid','$store_name','$shop_information','$shop_range','$name','$cid_str','$mobile','$accessories_level','$business_type','$stock','$region','$address','$city','$add_time')";
-
-            $sid = $db->insert($sql,'last_insert_id');
-            if($sid){
-                //更新user_id.获取数据库最大一条id.然后加一，存入数据库
-                $sql2 = "select max(id) as userid from lkt_user where 1=1";
-                $r = $db->select($sql2);
-                $rr = $r[0]->userid;
-                $user_id = 'user'.($rr+1);//新注册的用户user_id
-
-                $sql_1 = "update lkt_user set user_id = '$user_id' where id = '$uid' and store_id = '$store_id'";
-                $db->update($sql_1);
-
-                $msg['mch_id'] = $sid;
-                $output->_jsonResult('注册成功！',$msg);
-            }else{
-                $db->rollback(); //如果添加失败，则回到到原来的数据
-                $output->_jsonError('-1','注册失败！');
-            }
-
-        }else{
-            $output->_jsonError('-1','注册失败！');
-        }
-    }
-
-    //登录
-    public function login(){
-        $db = DBAction::getInstance();
-        $output = New Result;
-        $request = $this->getContext()->getRequest();
-
-        $store_id = addslashes(trim($request->getParameter('store_id'))); // 商城id
-        $mobile   = $request->getParameter('mobile'); //账号
-        $password = $request->getParameter('password'); //密码
-
-        $sql = "select id,zhanghao from lkt_user where zhanghao = '$mobile'";
-        $arr = $db->select($sql);
-        if(!empty($arr)){
-            $sql2 = "select * from lkt_user where id = ".$arr[0]->id." and mima = '$password'";
-            $arr2 = $db->select($sql2);
-            if(!empty($arr2)){
-                //如果是商家登录 判断该商家是否审核通过
-                if($arr2[0]->level == 2){
-                    $sql3 = "select review_status from lkt_mch where review_status = 1";
-                    $arr3 = $db->select($sql3);
-                    if(empty($arr3)){
-                        $output->_jsonError('-1','该商家正在审核！');
-                    }
-                }
-                //生成token
-                $Tools = new Tools($db, $store_id, 1);
-
-                $token = $Tools->getToken();
-                $data['user_id'] = $arr2[0]->user_id;
-                $data['user_name'] = $arr2[0]->user_name;
-                $data['headimgurl'] = $arr2[0]->headimgurl;
-                $data['level'] = $arr2[0]->level; //用户等级
-
-                //修改用户token
-                $now_time = date('Y-m-d H:i:s');
-                $sql1 = "update lkt_user set access_id = '$token',last_time = '$now_time' where store_id = '$store_id' and zhanghao = '$mobile'";
-                $db->update($sql1);
-
-                echo json_encode(array('code'=>200,'access_id'=>$token,'user_id'=>$arr2[0]->user_id,'user_name'=>$arr2[0]->user_name,'headimgurl'=>$arr2[0]->headimgurl,'level'=>$arr2[0]->level,'y_password'=>1,'wx_status'=>0,'message'=>'成功!'));
-                exit;
-            }else{
-                /*$output->_jsonError('-1','密码错误！');*/
-                echo json_encode(array('code'=>114,'message'=>'密码错误!'));
-                exit;
-            }
-        }else{
-            //$output->_jsonError('-1','该账号不存在！');
-            echo json_encode(array('code'=>113,'message'=>'该号码未注册,请注册!'));
-            exit;
-        }
-    }
-
-
-
-    //忘记密码
-    public function forgetPwd(){
-        $db = DBAction::getInstance();
-        $output = New Result;
-        $request = $this->getContext()->getRequest();
-
-        $store_id = addslashes(trim($request->getParameter('store_id'))); // 商城id
-        $mobile   = $request->getParameter('mobile'); //手机号
-        $verify     = $request->getParameter('verify');  //验证码
-        $password   = $request->getParameter('password');  //密码
-        $confirm_password = $request->getParameter('confirm_password');  //确认密码
-
-        //查询手机号是否注册
-        $sql1 = "select zhanghao from lkt_user where zhanghao = '$mobile'";
-        $check = $db->select($sql1);
-        if(emtpy($check)){
-            $output->_jsonError('-1','该手机号未注册！');
-        }
-
-        //判断验证码是否正确
-        $arr = array($mobile,array('code'=>$verify));
-        $Tools = new Tools($db, $store_id, 2);
-        $rew = $Tools->verification_code($db,$arr);
-        if($rew){
-            $deleCode = "delete from lkt_session_id where id = '$rew' ";
-            $db->delete($deleCode);
-        }
-
-        //判断密码是否一致
-        if($password != $confirm_password){
-            $output->_jsonError('-1','密码不一致！');
-        }
-
-        //修改密码
-        $sql = "update lkt_user set mima = '$confirm_password' where zhanghao = '$mobile'";
-        $checkUpdate = $db->update($sql);
-        if($checkUpdate < 0){
-            $output->_jsonError('-1','修改失败！');
-        }else{
-            $output->_jsonResult('修改成功！');
-        }
-    }
-
-    //查询商户资料
-    public function user_info(){
-        $db = DBAction::getInstance();
-        $output = New Result;
-
-        $request = $this->getContext()->getRequest();
-        $store_id = trim($request->getParameter('store_id')); // 商城ID
-        $mch_id = $request->getParameter('mch_id');
-
-        $sql = "select * from lkt_mch where id = ".$mch_id." and store_id = ".$store_id;
-        $arr = $db->select($sql);
-        if($arr){
-            $output->_jsonResult('',$arr);
-        }
-    }
-
-
-    //修改商家资料
-    public function update_info(){
-        $db = DBAction::getInstance();
-        $output = New Result;
-        $request = $this->getContext()->getRequest();
-        $store_id = trim($request->getParameter('store_id')); // 商城ID
-
-        $mch_id     = $request->getParameter('mch_id'); //商家ID
-        $realname   = $request->getParameter('realname'); //姓名
-        $phone      = $request->getParameter('phone'); //联系方式
-        $region     = $request->getParameter('region'); //地区
-
-        // 查询配置表信息
-        $sql = "select * from lkt_config where store_id = '$store_id'";
-        $r = $db->select($sql);
-
-        $uploadImg_domain = $r[0]->uploadImg_domain;
-
-        //营业执照照片
-        if(!empty($_FILES['business_license'])){
-
-            // 图片上传位置
-            $uploadImg = "../LKT/images/upload/";
-            $business_license = ServerPath::file_upload2($_FILES['cashier_image'],$store_id,$uploadImg,$uploadImg_domain);
-
-            if($business_license == false){
-                $output->_jsonError('-1','请上传门店照片！');
-            }else{
-                $business_license = preg_replace('/.*\//', '', $business_license);
-            }
-        }else{
-            $output->_jsonError('-1','请上传门店照片！');
-        }
-
-        //门店照片
-        if(!empty($_FILES['store_image'])){
-
-            // 图片上传位置
-            $uploadImg = "../LKT/images/upload/";
-            $store_image = ServerPath::file_upload2($_FILES['station_image'],$store_id,$uploadImg,$uploadImg_domain);
-
-            if($store_image == false){
-                $output->_jsonError('-1','请上传工位照片！');
-            }else{
-                $store_image = preg_replace('/.*\//', '', $store_image);
-            }
-        }else{
-            $output->_jsonError('-1','请上传工位照片！');
-        }
-
-        //收银台照片（前台）
-        if(!empty($_FILES['cashier_image'])){
-
-            // 图片上传位置
-            $uploadImg = "../LKT/images/upload/";
-            $cashier_image = ServerPath::file_upload2($_FILES['storeroom_image'],$store_id,$uploadImg,$uploadImg_domain);
-
-            if($cashier_image == false){
-                $output->_jsonError('-1','请上传工位照片！');
-            }else{
-                $cashier_image = preg_replace('/.*\//', '', $cashier_image);
-            }
-        }else{
-            $output->_jsonError('-1','请上传工位照片！');
-        }
-
-        //库房照片
-        if(!empty($_FILES['storeroom_image'])){
-
-            // 图片上传位置
-            $uploadImg = "../LKT/images/upload/";
-            $storeroom_image = ServerPath::file_upload2($_FILES['work_image'],$store_id,$uploadImg,$uploadImg_domain);
-
-            if($storeroom_image == false){
-                $output->_jsonError('-1','请上传工作照片！');
-            }else{
-                $storeroom_image = preg_replace('/.*\//', '', $storeroom_image);
-            }
-        }else{
-            $output->_jsonError('-1','请上传工作照片！');
-        }
-
-        $sql = "insert into lkt_review(mch_id, realname, phone, region, business_license, store_image, cashier_image, storeroom_image) values($mch_id, $realname, $phone, $region, $business_license, $store_image, $cashier_image, $storeroom_image)";
-        $add = $db->insert($sql);
-        if($add){
-            $output->_jsonResult('','修改成功，请等待审核！');
-        }else{
-            $output->_jsonError('-1','修改失败！');
-        }
-    }
-
-
     // 判断是否要注册
     public function is_register(){
         $db = DBAction::getInstance();
@@ -663,7 +134,7 @@ class loginAction extends Action {
             curl_setopt($ch, CURLOPT_HEADER, 0);
             // 保证返回成功的结果是服务器的结果
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-            curl_setopt($ch,   CURLOPT_SSL_VERIFYHOST, FALSE);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
             $res = curl_exec($ch);
@@ -682,7 +153,7 @@ class loginAction extends Action {
             }
         }
 
-
+       
 
         $sql0 = "select * from lkt_config where store_id = '$store_id'";
         $r0 = $db->select($sql0);
@@ -726,7 +197,7 @@ class loginAction extends Action {
                     }
 
                     $sql_2 = "update lkt_user set access_id = '$token' ".$setStr." where store_id = '$store_id' and wx_id = '$openid'";
-
+                    
 					$res_2 = $db->update($sql_2);
                     if($res_2 < 0){
                         $db->rollback();
@@ -756,10 +227,10 @@ class loginAction extends Action {
                     $sql = "select max(id) as userid from lkt_user where 1=1";
                     $r = $db->select($sql);
                     $rr = $r[0]->userid;
-                    $user_id = $user_id1.($rr+1);//新注册的用户user_id
-
+                    $user_id = $user_id1.($rr+1);//新注册的用户user_id 
+                   
                     $sql_0 = "select id from  lkt_user where store_id = '$store_id' and wx_id = '$openid'";
-                    $res_0 = $db->select($sql_0);
+                    $res_0 = $db->select($sql_0); 
                     $new_id = $res_0[0]->id;//要修改的用户id
 
                     $sql_1 = "update lkt_user set user_id = '$user_id' where id = '$new_id' and store_id = '$store_id'";
@@ -1349,7 +820,7 @@ class loginAction extends Action {
         exit;
     }
     // 注册
-    /*public function user_register(){
+    public function user_register(){
         $db = DBAction::getInstance();
         $request = $this->getContext()->getRequest();
         $store_id = trim($request->getParameter('store_id'));
@@ -1461,7 +932,7 @@ class loginAction extends Action {
         
 
         exit;
-    }*/
+    }
     // 注册协议
     public function register_agreement(){
         $db = DBAction::getInstance();
@@ -1722,7 +1193,7 @@ class loginAction extends Action {
         }
     }
     // 用户登录
-    /*public function login(){
+    public function login(){
         $db = DBAction::getInstance();
         $request = $this->getContext()->getRequest();
         $store_id = trim($request->getParameter('store_id'));
@@ -1737,14 +1208,12 @@ class loginAction extends Action {
         $wx_status = 0;
         $sql01="select * from lkt_user where store_id = '$store_id' and (zhanghao = '$tel' or mobile = '$tel')";
         $re = $db->select($sql01);
-
         if(!empty($re)){
             if($re[0]->mima == ''){
                 echo json_encode(array('code'=>114,'message'=>'您还为设置密码，请用验证码登录!'));
                 exit;
             }
             $password01= $db->unlock_url($re[0]->mima);
-
             $user_id = $re[0]->user_id;
             $user_name = $re[0]->user_name;
             $headimgurl = $re[0]->headimgurl;
@@ -1757,8 +1226,8 @@ class loginAction extends Action {
             }else if($store_type == 2){
 
             }
-            if($password){
-                //if($password == $password01 && strlen($password) == strlen($password01) ){
+            if($password01){
+                if($password == $password01 && strlen($password) == strlen($password01) ){
                     if(empty($access_id)){ // 授权ID为空,代表没有进入商品详情
                         // 生成密钥
                         $token = Tools::getToken();
@@ -1801,7 +1270,7 @@ class loginAction extends Action {
                     $sql = "insert into lkt_record (store_id,user_id,add_date,event,type) values ('$store_id','$user_id',CURRENT_TIMESTAMP,'$event',0)";
                     $r01 = $db->insert($sql);
                     if($r01 > 0){
-                        $y_password = 1; // 有密码
+                         $y_password = 1; // 有密码
 
                         echo json_encode(array('code'=>200,'access_id'=>$token,'user_name'=>$user_name,'headimgurl'=>$headimgurl,'y_password'=>$y_password,'wx_status'=>$wx_status,'message'=>'成功!'));
                         exit;
@@ -1810,7 +1279,7 @@ class loginAction extends Action {
                        exit;
                     }
                    
-                /*}else{
+                }else{
                     echo json_encode(array('code'=>114,'message'=>'密码错误!'));
                     exit;
                 }
@@ -1823,7 +1292,7 @@ class loginAction extends Action {
             exit;
         }
 
-    }*/
+    }
 
     // 获取旧密码
     public function oldpassword(){

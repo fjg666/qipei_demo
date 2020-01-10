@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.31, created on 2019-12-24 12:17:05
+<?php /* Smarty version 2.6.31, created on 2019-12-20 16:10:46
          compiled from Config.tpl */ ?>
 <?php $_smarty_tpl_vars = $this->_tpl_vars;
 $this->_smarty_include(array('smarty_include_tpl_file' => "../../include_path/header.tpl", 'smarty_include_vars' => array('sitename' => "DIY头部")));

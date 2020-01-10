@@ -19,7 +19,7 @@ class Plugin {
             }
         }
         return $list;
-    } 
+    }
     // 检验插件还是否存在
     public function add($db,$store_id,$role,$menu_list){
         $menu_list_0 = array();

@@ -1,1 +1,5 @@
-﻿
+﻿日期：2019-12-30 15:35:28
+【APP调用支付】执行日期：2019-12-30 15:35:28
+"alipay_sdk=alipay-sdk-php-20180705&app_id=2019030763497116&biz_content=%7B%22subject%22%3A+%22%E5%85%85%E5%80%BC%22%2C%22out_trade_no%22%3A+%22CZ1577691328248400831%22%2C%22total_amount%22%3A+%22100%22%2C%22product_code%22%3A%22QUICK_MSECURITY_PAY%22%7D&charset=UTF-8&format=json&method=alipay.trade.app.pay&notify_url=http%3A%2F%2Fxiaochengxu.houjiemeishi.com%2FV3%2F%2Fzfbnotify_url.php&sign_type=RSA2&timestamp=2019-12-30+15%3A35%3A28&version=1.0&sign=EklhVtvPQIc7LHTKVTppmYagt1ODeG1BgitwcVhsXNFYi9w1diuQmLEFrwM6yTqrVOm2vBquPXpUVrfHS8t9M%2BraHzqvCMCUAicgzdN6YO5cC5sj79RNAMVvTEBBbx1HUoMVwX1MbM4Irfij%2Bu5roezlaOyusvqcmxZt7VrCYolfrz4iejAuibl%2BfixQQxN51k5d1DwRfZXu2yWNoQEwVu%2FI%2F24umpczmprbFxY%2BkBdmyKxYZD2EyJx1Fx%2FrZHTlsDa2sva3ETvAtIutfjpZF%2Br%2FC1g2%2Bwx4%2BjQGSvI4gW%2BXHpcoJsymaDEHp82kx4HWTAT3z5Gs3o1RZhwbfmn3Sg%3D%3D"
+
+
