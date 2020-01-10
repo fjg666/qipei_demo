@@ -2022,6 +2022,14 @@ class Tools
         $token = Jwt::getToken($payload);
         return $token;
     }
+
+    // 对token进行验证签名,如果过期返回false,成功返回数组
+    public static function userToken($access_id){
+
+        $getPayload_test = Jwt::verifyToken($access_id);
+        return $getPayload_test;
+    }
+
     // 对token进行验证签名,如果过期返回false,成功返回数组
     public static function verifyToken($db,$store_id,$store_type,$access_id){
         $sql0 = "select is_register from lkt_config where store_id = '$store_id'";

@@ -1,3 +1,0 @@
-日期：2019-12-31 16:52:34
-128:插入积分记录失败，sql为：insert into lkt_record (store_id,user_id,money,oldmoney,event,type) values ('1','user335','10000','0','user335系统充值10000积分',15)
-

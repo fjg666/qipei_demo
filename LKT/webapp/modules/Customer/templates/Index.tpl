@@ -44,9 +44,9 @@
         </form>
     </div>
      <div class="page_h16"></div>
-    <div style="clear:both;" class="page_bgcolor">
+    {*<div style="clear:both;" class="page_bgcolor">
         <a class="btn newBtn radius" href="index.php?module=Customer&action=Add"><img src="images/icon1/add.png"/>&nbsp;添加商城</a>
-    </div>
+    </div>*}
     <div class="page_h16"></div>
 
     <input type="hidden" name="length" value="{$list|@count}">
@@ -58,10 +58,10 @@
                     <th>商城ID</th>
                     <th>姓名</th>
                     <th>手机</th>
-                    <th>价格</th>
+                    {*<th>价格</th>*}
                     <th>公司名称</th>
-                    <th class="tab_time">购买时间</th>
-                    <th class="tab_time">到期时间</th>
+                    <th class="tab_time">创建时间</th>
+                    {*<th class="tab_time">到期时间</th>*}
                     <th>状态</th>
                     <th class="tab_dat">操作</th>
                 </tr>
@@ -72,10 +72,10 @@
                     <td>{$item->id}</td>
                     <td>{$item->name}</td>
                     <td>{$item->mobile}</td>
-                    <td>{$item->price}</td>
+                    {*<td>{$item->price}</td>*}
                     <td>{$item->company}</td>
                     <td class="tab_time">{$item->add_date}</td>
-                    <td class="tab_time">{$item->end_date}</td>
+                    {*<td class="tab_time">{$item->end_date}</td>*}
                     <td>
                         {if $item->status == 0}
                             <span style="color: #30c02d;">启用</span>
@@ -86,7 +86,7 @@
                         {/if}
                     </td>
                     <td class="tab_dat">
-                        {if $item->status == 0}
+                        {*{if $item->status == 0}
                             <a style="text-decoration:none" class="ml-5" href="javascript:void(0);" onclick="mcheck('index.php?module=Customer&action=Sstatus&id=','{$item->id}','{$item->status}')" title="锁定">
                                 <img src="images/icon1/sd.png"/>&nbsp;锁定
                             </a>
@@ -94,16 +94,16 @@
                             <a style="text-decoration:none" class="ml-5" href="javascript:void(0);" onclick="mcheck('index.php?module=Customer&action=Sstatus&id=','{$item->id}','{$item->status}')" title="解锁">
                                 <img src="images/icon1/sd.png"/>&nbsp;启用
                             </a>
-                        {/if}
+                        {/if}*}
                         {*<a style="text-decoration:none" class="ml-5" href="index.php?module=Customer&action=See&id={$item->id}" title="查看">*}
                             {*<img src="images/icon1/ck.png"/>&nbsp;查看*}
                         {*</a>*}
                         <a style="text-decoration:none" class="ml-5" href="index.php?module=Customer&action=Modify&id={$item->id}" title="编辑">
                             <img src="images/icon1/xg.png"/>&nbsp;编辑
                         </a>
-                        <a style="text-decoration:none" class="ml-5" title="删除" onclick="Del('index.php?module=Customer&action=Del&id={$item->id}','{$item->status}')">
+                        {*<a style="text-decoration:none" class="ml-5" title="删除" onclick="Del('index.php?module=Customer&action=Del&id={$item->id}','{$item->status}')">
                             <img src="images/icon1/del.png"/>&nbsp;删除
-                        </a>
+                        </a>*}
                         <a style="text-decoration:none;width: 88px;" class="ml-5" href="javascript:void(0);" onclick=" confirm1('密码重置','{$item->name}','{$item->admin_id}','index.php?module=Customer&action=Reset&id=')" title="密码重置">
                             <img src="images/icon1/cz.png"/>&nbsp;密码重置
                         </a>

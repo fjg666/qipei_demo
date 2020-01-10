@@ -102,7 +102,6 @@ class AddAction extends Action {
 
             // 活动开始时间大于当前时间,活动还没开始
             $sql = "INSERT INTO lkt_customer (`customer_number`,`admin_id`, `name`, `mobile`, `price`, `company`, `function`, `add_date`, `end_date`, `status`, `email`) VALUES ('$customer_number','0','$name','$phone','$price','$company',2,CURRENT_TIMESTAMP,'$endtime','$status','$email')";
-            //echo $sql;die();
             $rr = $db->insert($sql,'last_insert_id'); // 得到添加数据的id
 
             if($rr > 0){

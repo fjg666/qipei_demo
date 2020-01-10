@@ -6,7 +6,7 @@ require_once(MO_LIB_DIR . '/Tools.class.php');
 require_once(MO_LIB_DIR . '/LaiKeLogUtils.class.php');
 class ModifyAction extends Action{
 		public function getDefaultView(){
-			
+
 
 			$db = DBAction::getInstance();
 	        $request = $this->getContext()->getRequest();
@@ -25,7 +25,7 @@ class ModifyAction extends Action{
 	        	 $mima = $db->unlock_url($mima);
 	            $r[0]->mima_1 = $mima;
 	        }
-	       
+
 
 	        //该用户有效订单数
 	        $sql_1 = "select id from lkt_order where store_id = '$store_id' and user_id='$id' and status > 0 and status not in (4,7,11) and pay_time != ''";
@@ -38,11 +38,11 @@ class ModifyAction extends Action{
 	        $res_2 = $db->select($sql_2);
 
 	        if(empty($res_2[0]->z_price)){
-	        	
+
 	        		$r[0]->z_price = 0;
-	        	
+
 	        }else{
-	        	
+
 	        	$r[0]->z_price = $res_2[0]->z_price;
 	        }
 	        //会员等级
@@ -52,10 +52,10 @@ class ModifyAction extends Action{
 
 	        if($grade == 0){
 				$r[0]->grade1 = '<option value = "0" selected = "selected">普通会员</option>';
-				
+
  			}else{
 				$r[0]->grade1 = '<option value = "0">普通会员</option>';
-				
+
  			}
  			if($res_3){
  				foreach ($res_3 as $k => $v) {
@@ -77,7 +77,7 @@ class ModifyAction extends Action{
  			}
 
  			$end = $r[0]->grade_end;
-          
+
 	        $request->setAttribute('user', $r);
 	        $request->setAttribute('end', $end);
 

@@ -67,7 +67,7 @@ var open = 0;
 layui.use('layer', function () {
     //非空验证
     $('.login_fields__submit').click(function () {
-        var customer_number = $('.num').val();
+        var loginType = $("input[name='loginType']:checked").val();
         var login = $('.username').val();
         var pwd = $('.passwordNumder').val();
         
@@ -111,7 +111,7 @@ layui.use('layer', function () {
             }, 500);
 
             //登陆
-            var JsonData = {customer_number:customer_number,login: login, pwd: pwd};
+            var JsonData = {loginType:loginType,login: login, pwd: pwd};
             //此处做为ajax内部判断
 
             setTimeout(function () {

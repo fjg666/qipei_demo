@@ -219,8 +219,137 @@ class ServerPath{
         }else{
             return $url;
         }
+    }
 
+    /**
+     * @param $store_id String  商户id
+     * @param $uploadImg String  图片上传位置
+     * @param $uploadImg_domain String  服务器域名
+     * @param $returnpath bool  是否返回全路径
+     * return String '返回阿里云上的图片路径
+     */
+    public static function file_upload2($file,$store_id,$uploadImg,$uploadImg_domain,$store_type = 'app',$returnpath = false)
+    {
+        $db = DBAction::getInstance();
+        /*$name = array_keys($_FILES);
+        if(!empty($name) && count($name) == 1){
+            list($name) = $name;*/
+            //获取图片类型
+            $type = str_replace('image/', '.', $file['type']);
+            $tmpname = $file['tmp_name'];
+        //}
 
+        $imgtype = array('.png','.jpg','.jpeg','.gif');
+        if(!in_array($type,$imgtype)){
+            return false;
+        }
+        $sql1 = "select attr,attrvalue from lkt_upload_set where type = '本地'";
+        $r1 = $db->select($sql1);
+        foreach ($r1 as $k => $v){
+            if($v->attr == 'uploadImg_domain'){
+                $uploadImg_domain = $v->attrvalue; // 图片上传域名
+            }else if($v->attr == 'uploadImg'){
+                $uploadImg = $v->attrvalue; // 图片上传位置
+            }
+        }
+        if($store_id){
+            $uploadImg = $uploadImg.'image_'.$store_id.'/';
+        }else{
+            $uploadImg = $uploadImg.'image_0/';
+        }
+
+        if(is_dir($uploadImg) == ''){ // 如果文件不存在
+            mkdir($uploadImg); // 创建文件
+        }
+        if(strpos($uploadImg,'./') === false){ // 判断字符串是否存在 ../
+            $img = $uploadImg_domain . $uploadImg; // 图片路径
+        }else{
+            $img = $uploadImg_domain . substr($uploadImg,1); // 图片路径
+        }
+
+        //图片名字
+        $fileName = time().mt_rand(1,1000).$type;
+        move_uploaded_file($tmpname,$uploadImg.$fileName);
+        $url = $img.$fileName;
+
+        $fsql = " INSERT INTO `lkt_files_record` ( `store_id`, `store_type`, `group`, `upload_mode`, `image_name`) VALUES ('$store_id', '$store_type', '1', '1', '$fileName') ";
+        $res = $db->insert($fsql);
+
+        if($returnpath == false){
+            return $fileName;
+        }else{
+            return $url;
+        }
+
+    }
+
+    /**
+     * 多文件上传
+     * @param1 array $file,要上传的文件信息，包含5个元素
+     * @param2 string $path,存储位置
+     * @param3 $string error,错误信息
+     * @param4 array $type=array(),MIME类型限定
+     * @param5 int $size=2000000,默认2M
+     * @return mixed, 成功返回文件名，失败返回false
+     */
+    public static function fileUpload($file,$path,&$error,$type=array(),$size=2000000 ){
+        //判断本身文件是否有效
+        if(!isset($file['error'])){
+            $error='文件无效';
+            return false;
+        }
+
+        if(is_dir($path) == ''){ // 如果文件不存在
+            mkdir($path); // 创建文件
+        }
+        //判断文件本身上传是否成功
+        switch ($file['error']){
+            case 1:
+            case 2:
+                $error='文件超过服务器允许大小';
+                return false;
+            case 3:
+                $error='文件只有部分上传';
+                return false;
+            case 4:
+                $error='用户没有选择文件上传';
+                return false;
+            case 6:
+            case 7:
+                $error='服务器操作失败';
+                return false;
+        }
+        //判断类型是否符合
+        if (!empty($type) && !in_array($file['type'],$type)){
+            $error='当前上传的文件类型不符合';
+            return false;
+        }
+        //大小判断
+        if ($file['size']>$size){
+            $error='文件大小超过当前允许范围.当前允许大小是：'.string($size/1000000).'M';
+            return false;
+        }
+        //转存，移动文件
+        $newfilename=getNewName($file['name']);
+        if(@move_uploaded_file($file['tmp_name'],$path.''.$newfilename)){
+            return $newfilename;
+        }
+        else{
+            $error='文件上传失败';
+            return false;
+        }
+    }
+
+    //随机产生一个文件名
+    public function getNewName($filename,$rand=6){
+        $newname=date('YmdHis');//时间日期部分
+        //随机部分
+        $old=array_merge(range('a','z'),range('A','Z'));
+        shuffle($old);
+        for ($i=0;$i<$rand;$i++){
+            $newname.=$old[$i];
+        }
+        return $newname.strstr($filename,'.');//组织有效文件名
     }
 
     /**

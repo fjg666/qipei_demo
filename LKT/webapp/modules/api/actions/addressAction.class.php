@@ -45,6 +45,7 @@ class addressAction extends Apimiddle {
     }
     // 地址管理
     public function index(){
+
         $db = DBAction::getInstance();
         $request = $this->getContext()->getRequest();
         $store_id = trim($request->getParameter('store_id'));

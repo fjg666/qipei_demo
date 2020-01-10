@@ -7,8 +7,6 @@ require_once(MO_LIB_DIR . '/JurisdictionAction.class.php');
 class IndexAction extends Action {
     /**
      * <p>Copyright (c) 2018-2019</p>
-     * <p>Company: www.laiketui.com</p>
-     * @author 段宏波
      * @date 2018/12/12  17:50
      * @version 1.0
      */

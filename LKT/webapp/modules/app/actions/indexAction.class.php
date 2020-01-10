@@ -1,6 +1,7 @@
 <?php
 require_once(MO_LIB_DIR . '/DBAction.class.php');
 require_once(MO_LIB_DIR . '/ShowPager.class.php');
+require_once(MO_LIB_DIR . '/resultAction.class.php');
 require_once(MO_LIB_DIR . '/Tools.class.php');
 require_once(MO_LIB_DIR . '/ServerPath.class.php');
 
@@ -9,6 +10,7 @@ require_once(MO_LIB_DIR . '/Plugin/sign.class.php');
 require_once(MO_LIB_DIR . '/Plugin/bargain.class.php');
 require_once(MO_LIB_DIR . '/Plugin/coupon.class.php');
 require_once(MO_LIB_DIR . '/Plugin/auction.class.php');
+require_once(MO_LIB_DIR . '/RedisClusters.php');
 
 class indexAction extends Action {
     public function getDefaultView() {
@@ -36,6 +38,274 @@ class indexAction extends Action {
     public function getRequestMethods(){
         return Request :: POST;
     }
+
+    //查询首页轮播图
+    public function app_banner(){
+        $db = DBAction::getInstance();
+        $output = New Result;
+
+        // 查询轮播图,根据排序、轮播图id顺序排列
+        $sql = "select * from lkt_banner where store_id = '1' and type = '2' order by sort desc";
+        $r = $db->select($sql);
+        $banner = array();
+        if($r){
+            foreach($r as $k=>$v){
+                $result = array();
+                $result['id'] = $v->id; // 轮播图id
+                $result['image'] = ServerPath::getimgpath($v->image,1); // 图片
+                $result['url'] = $v->url;
+                $domain = strstr($v->url, 'tabBar');
+                if($domain){
+                    $result['type'] = 'switchTab';
+                }else{
+                    $result['type'] = 'navigate';
+                }
+                $result['parameter'] = trim(strrchr($v->url, '='),'=');
+                $banner[] = $result;
+                unset($result); // 销毁指定变量
+            }
+        }
+        $output->_jsonResult('',$banner);
+    }
+
+    //查询所有车型
+    public function car_model_list(){
+        $db = DBAction::getInstance();
+        $redis = new RedisClusters();
+        $output = New Result;
+        $redis->connect();
+
+        $car_model = $redis->get('car_model');
+
+        if($car_model){
+            echo $car_model;
+        }else{
+            //type=1 汽车品牌车型
+            $sql = "select cid,sid,pname,img,level from lkt_product_class where store_id = 1 and type = 1";
+            $parent = $db->select($sql);
+            $arr = json_decode(json_encode($parent),true);
+            $res = $this->cate_tree($arr,0,0);
+            $data = json_encode($res);
+            $redis->set('car_model',$data);
+
+            echo $data;
+        }
+        $redis->close();//关闭句柄
+    }
+
+    //根据品牌查询车型
+    public function son_list(){
+
+        $db = DBAction::getInstance();
+        $request = $this->getContext()->getRequest();
+        $redis = new RedisClusters();
+        $redis->connect();
+        $cid = trim($request->getParameter('cid'));
+
+        $car_model = $redis->get('car_son_model');
+
+        if($car_model){
+            echo $car_model;
+        }else{
+            //type=1 汽车品牌车型
+            $sql = "select cid,sid,pname,img,level from lkt_product_class where sid = ".$cid." and type = 1";
+            $parent = $db->select($sql);
+            $parent = json_decode(json_encode($parent), true);
+            foreach($parent as $key=>$val){
+                $sql = "select cid,sid,pname,img,level from lkt_product_class where sid = ".$val['cid']." and type = 1";
+                $son = $db->select($sql);
+                $son = json_decode(json_encode($son), true);
+                foreach($son as $k=>$v){
+                    $parent[$key]['son'][] = $v;
+                }
+            }
+            $data = json_encode($parent);
+            //添加到redis里面
+            $redis->set('car_son_model',$data);
+
+            echo $data;
+        }
+        $redis->close();//关闭句柄
+    }
+
+    //递归分类
+    public function cate_tree($arr,$id,$level)
+    {
+        $list = array();
+        foreach ($arr as $k=>$v){
+            if ($v['sid'] == $id){
+                $v['level']=$level;
+                $v['son'] = $this->cate_tree($arr,$v['cid'],$level+1);
+                $list[] = $v;
+            }
+        }
+        return $list;
+    }
+
+    //查询所有专项件
+    public function car_Special(){
+        $db = DBAction::getInstance();
+        $redis = new RedisClusters();
+        $output = New Result;
+        $redis->connect();
+
+        $car_model = $redis->get('car_Special');
+
+        if($car_model){
+            echo $car_model;
+        }else{
+            //type=2 专项件
+            $sql = "select cid,sid,pname,img,level from lkt_product_class where store_id = 1 and type = 2";
+            $parent = $db->select($sql);
+            $arr = json_decode(json_encode($parent),true);
+            $data = json_encode($arr);
+            $redis->set('car_Special',$data);
+
+            echo $data;
+        }
+        $redis->close();//关闭句柄
+    }
+	
+	//查询快递名称列表
+	public function logistics_list(){
+		$output = New Result;
+
+        //
+        $host = "http://wuliu.market.alicloudapi.com";
+		$path = "/getExpressList";
+		$method = "GET";
+		$appcode = "db13534fe5aa4cfa94dcf1eefded576b";
+		$headers = array();
+		array_push($headers, "Authorization:APPCODE " . $appcode);
+		$querys = "type=ALL";
+		$bodys = "";
+		$url = $host . $path . "?" . $querys;
+
+		$curl = curl_init();
+		curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
+		curl_setopt($curl, CURLOPT_URL, $url);
+		curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+		curl_setopt($curl, CURLOPT_FAILONERROR, false);
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($curl, CURLOPT_HEADER, false);
+		//curl_setopt($curl, CURLOPT_HEADER, true); 如不输出json, 请打开这行代码，打印调试头部状态码。
+		//状态码: 200 正常；400 URL无效；401 appCode错误； 403 次数用完； 500 API网管错误
+		if (1 == strpos("$".$host, "https://"))
+		{
+			curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+			curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+		}
+		$result = json_decode(curl_exec($curl), true);
+		$output->_jsonResult('',$result['result']);
+
+	}
+
+
+	//根据单号查询快递信息
+	public function logistics(){
+		$output = New Result;
+		$request = $this->getContext()->getRequest();
+
+        //
+        $order_sn = trim($request->getParameter('order_sn'));
+		$type = trim($request->getParameter('type'));
+
+		$host = "https://wuliu.market.alicloudapi.com";//api访问链接
+		$path = "/kdi";//API访问后缀
+		$method = "GET";
+		$appcode = "db13534fe5aa4cfa94dcf1eefded576b";//替换成自己的阿里云appcode
+		$headers = array();
+		array_push($headers, "Authorization:APPCODE " . $appcode);
+		$querys = "no=".$order_sn."&type=".$type;  //参数写在这里
+		$bodys = "";
+		$url = $host . $path . "?" . $querys;//url拼接
+
+		$curl = curl_init();
+		curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
+		curl_setopt($curl, CURLOPT_URL, $url);
+		curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+		curl_setopt($curl, CURLOPT_FAILONERROR, false);
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($curl, CURLOPT_HEADER, false);
+		//curl_setopt($curl, CURLOPT_HEADER, true); 如不输出json, 请打开这行代码，打印调试头部状态码。
+		//状态码: 200 正常；400 URL无效；401 appCode错误； 403 次数用完； 500 API网管错误
+		if (1 == strpos("$".$host, "https://"))
+		{
+			curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+			curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+		}
+		$result = curl_exec($curl);
+		$result = json_decode($result, true);
+		if($result['status'] == '0'){
+			$output->_jsonResult('',$result);
+		}else{
+			$output->_jsonError('-1',$result['msg']);
+		}
+	}
+
+    //搜索店铺
+    public function search_mch(){
+        $db = DBAction::getInstance();
+        $output = New Result;
+        $request = $this->getContext()->getRequest();
+        $page = addslashes(trim($request->getParameter('page')));
+
+        $cid = $request->getParameter('cid');  //品牌分类id 根据品牌搜索
+        $search_type = $request->getParameter('search_type');  //搜索类型 1=根据品牌 2=根据专项件
+        $keyword = $request->getParameter('keyword'); //专项件名称  根据专项件搜索
+
+        $user_id  = $request->getParameter('user_id');  //用户id
+
+        $region = $request->getParameter('region');  //区域
+        $city  = $request->getParameter('city');  //汽配城
+        $level = $request->getParameter('level');  //配件等级
+
+        if(!isset($search_type)){
+            $output->_jsonError('-1','参数为空！');
+        }
+
+        //如果没有传入page 默认传入第一页
+        if (!$page) {$page = 1;}
+        //每页条数
+        $pagesize = 20;
+        $start = ($page - 1) * $pagesize;
+
+        $str = '';
+        if($city){
+            $str = " city like '%".$city."%'";
+        }
+
+        if($search_type == 1){
+            //查询这个分类和上级分类的店铺
+            $sql = "select * from lkt_mch where review_status = 1 and region like '%".$region."%' and accessories_level like '%".$level."%' and brand_model like '%".$cid."%'".$str;
+        }elseif($search_type == 2){
+            //查询某个区域的专项件的店铺
+            $sql = "select * from lkt_mch where review_status = 1 and region like '%".$region."%' and accessories_level like '%".$level."%' and earmarked_cate like '%".$keyword."%'".$str;
+        }
+
+        $sql .= " limit $start,$pagesize";
+        $arr = $db->select($sql);
+
+        //查询该店铺是否收藏和收藏数量
+        if(!empty($arr)){
+            foreach($arr as $key=>$val){
+                $sql2 = "select id from lkt_user_collection where user_id = '$user_id' and mch_id = ".$val->id." and type = 1";
+                $check = $db->select($sql2);
+                if($check){
+                    $arr[$key]['is_collection'] = 1; //已收藏
+                }else{
+                    $arr[$key]['is_collection'] = 2; //未收藏
+                }
+
+                /*$sql3 = "select count(*) as number from lkt_user_collection where mch_id = 1 and type = 1";
+                $number = $db->select($sql3);
+                $arr[$key]['number'] = $number[0]->number;*/
+            }
+        }
+
+        $output->_jsonResult('',$arr);
+    }
+
 
     // 获取小程序首页数据
     public function index(){

@@ -35,7 +35,7 @@
                 <tr class="text-c tab_tr">
                     <th class='table-id'>账户ID</th>
                     <th>账号</th>
-                    <th>所属客户编号</th>
+                    {*<th>所属客户编号</th>*}
                     <th>绑定角色</th>
                     <th>添加人</th>
                     <th>添加时间</th>
@@ -47,7 +47,7 @@
                 <tr class="text-c tab_td">
                     <td class="tab_num">{$item->id}</td>
 					<td>{$item->name}</td>
-                    <td>{$customer_number}</td>
+                    {*<td>{$customer_number}</td>*}
 					<td>{$item->role_name}</td>
                     <td>{$item->admin_name}</td>
                     <td >{$item->add_date}</td>

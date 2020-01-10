@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.31, created on 2019-12-20 16:09:45
+<?php /* Smarty version 2.6.31, created on 2019-12-24 12:17:37
          compiled from ../../include_path/nav.tpl */ ?>
 <nav class="breadcrumb page_bgcolor">
 	<?php $_from = $this->_tpl_vars['menu']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }$this->_foreach['f1'] = array('total' => count($_from), 'iteration' => 0);

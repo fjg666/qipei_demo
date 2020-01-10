@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.31, created on 2019-12-20 15:35:27
+<?php /* Smarty version 2.6.31, created on 2019-12-24 12:16:47
          compiled from ../../include_path/header.tpl */ ?>
 <link href="style/css/H-ui.min.css" rel="stylesheet" type="text/css" />
 <link href="style/css/H-ui.admin.css" rel="stylesheet" type="text/css" />

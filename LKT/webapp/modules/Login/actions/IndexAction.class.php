@@ -64,6 +64,9 @@ class IndexAction extends LaiKeAction {
 
         // 获取输入的客户编号
         $customer_number = addslashes(trim($request->getParameter("customer_number")));
+        $customer_number = 'Laiketui.com';
+        $loginType = addslashes(trim($request->getParameter("loginType")));
+
         // 获取输入的用户名
         $name = addslashes(trim($request->getParameter("login")));
         // 获取输入的密码
@@ -74,7 +77,8 @@ class IndexAction extends LaiKeAction {
             exit();
         };
         $day = '';
-        if($customer_number != ''){ // 客户编号不为空，不是系统管理员
+        //if($customer_number != ''){ // 客户编号不为空，不是系统管理员
+        if($loginType == 2){ //登录类型=2，代表是商户登录，默认赋值商户编号。
             // 查询客户编号是否存在
             $sql = "select id from lkt_customer where customer_number = '$customer_number'";
             $r = $db->select($sql);

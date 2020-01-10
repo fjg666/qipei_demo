@@ -223,6 +223,7 @@ class orderAction extends Action
             $seckill_time_id = $seckill_time_res[0]->id;
             //获取商品id
             $pro_id = $product_id[0];
+
             //查询出秒杀价格
             $sel_price_sql = "SELECT * FROM `lkt_seconds_pro` WHERE 1 and is_delete = 0 and pro_id = $pro_id and activity_id = $seckill_activity_id and time_id = $seckill_time_id";
             $price_res = $db->select($sel_price_sql);

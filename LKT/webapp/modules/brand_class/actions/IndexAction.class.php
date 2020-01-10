@@ -102,6 +102,11 @@ class IndexAction extends Action {
         return View :: INPUT;
     }
 
+    public function brand_list(){
+        
+    }
+
+
     public function execute() {
 
     }

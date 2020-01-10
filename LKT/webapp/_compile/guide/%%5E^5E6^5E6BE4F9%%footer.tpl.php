@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.31, created on 2019-12-20 16:09:45
+<?php /* Smarty version 2.6.31, created on 2019-12-24 12:17:37
          compiled from ../../include_path/footer.tpl */ ?>
 
 <script type="text/javascript" src="style/lib/layer/2.1/layer.js"></script>

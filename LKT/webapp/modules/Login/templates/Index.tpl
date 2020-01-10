@@ -142,18 +142,16 @@
 				<div class="page_login">
 					<div class='login_title'>
 						<img src="images/iIcon/logo2.png" />
-						<p style="color: #fff;font-size: 30px;">来客电商管理系统</p>
-						<p style="font-size: 14px; color: #fff;">Laike E-commerce Management System</p>
+						<p style="color: #fff;font-size: 30px;">汽配在线后台管理系统</p>
 					</div>
 
 					<div class='login_fields'>
 						<div class='login_fields__id'>
 							<div class='icon'>
-								<img alt="" class="hoverImg" src='images/iIcon/bh.png'>
+								{*<img alt="" class="hoverImg" src='images/iIcon/bh.png'>*}
 								<img alt="" class="hoverImg" style="display: none;" src='images/iIcon/bh_1.png'>
 							</div>
 
-							<input name="customer_number" required="required" class="ipt idCord num" placeholder='请输入客户编号' maxlength="32" class="id" type='text' autocomplete="off" />
 
 							<div class='validation'></div>
 							<span class="delText">
@@ -181,6 +179,15 @@
 								<img alt="" class="hoverImg" style="display: none;" src='images/iIcon/mm_1.png'>
 							</div>
 							<input name="pwd" required="required" class="passwordNumder ipt" placeholder='请输入密码' maxlength="16" type='password' autocomplete="off" title=''>
+							<div class='validation'></div>
+							<span class="delText">
+                        <img src="images/iIcon/qc_1.png" style="display:block;" />
+                    </span>
+						</div>
+
+						<div class='login_fields__password'>
+							超级管理员：<input type="radio" class="loginType ipt" name="loginType" value="1">
+							商户：<input type="radio" class="loginType ipt" name="loginType" value="2" checked/>
 							<div class='validation'></div>
 							<span class="delText">
                         <img src="images/iIcon/qc_1.png" style="display:block;" />
@@ -222,12 +229,12 @@
 			{*</div>*}
 			
 		</div>
-		<footer>
+		{*<footer>
 			<p>来客电商 <i> © </i> 专注于小程序电商开发平台</p>
 			<p>湖南壹拾捌号网络技术有限公司&nbsp;版权所有
 				<a href="http://www.miibeian.gov.cn" class="ipId" style="color: #97a0b4;">湘ICP备17020355号-2</a>
 			</p>
-		</footer>
+		</footer>*}
 		<div class='authent'>
 			<div class="loader" style="height: 60px;width: 60px;margin-left: 28px;margin-top: 40px">
 				<div class="loader-inner ball-clip-rotate-multiple">
