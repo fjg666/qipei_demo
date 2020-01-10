@@ -882,7 +882,7 @@
         </div>
     </div>
 </div>
-<footer class='bottom_foot'>
+{*<footer class='bottom_foot'>
     <div class="bottom_left">
         <span>联系地址：长沙市岳麓区绿地中央广场5栋3408</span>
         &nbsp;&nbsp;&nbsp;&nbsp;
@@ -895,7 +895,7 @@
          	<a class="BA" href="http://www.miibeian.gov.cn">湘ICP备17020355号</a>
          </span>
     </div>
-</footer>
+</footer>*}
 <script type="text/javascript" src="style/lib/jquery/1.9.1/jquery.min.js"></script>
 <script type="text/javascript" src="style/lib/layer/2.1/layer.js"></script>
 <script type="text/javascript" src="style/js/H-ui.js"></script>
