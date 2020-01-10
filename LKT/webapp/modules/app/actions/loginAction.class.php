@@ -852,9 +852,14 @@ class loginAction extends Action {
                 exit;
             }
         }
-        $arr = array($tel,array('code'=>$keyCode));
+        /*$arr = array($tel,array('code'=>$keyCode));
         $Tools = new Tools($db, $store_id, 1);
-        $rew = $Tools->verification_code($db,$arr);
+        $rew = $Tools->verification_code($db,$arr);*/
+        if($keyCode != '123456'){
+            echo json_encode(array('code'=>216,'message'=>'验证码是123456'));
+            exit;
+        }
+
 
         $sql0 = "select * from lkt_config where store_id = '$store_id'";
         $r0 = $db->select($sql0);
@@ -963,9 +968,14 @@ class loginAction extends Action {
 
         $pid = trim($request->getParameter('pid')); // 推荐人id
 
-        $arr = array($tel,array('code'=>$keyCode));
+        /*$arr = array($tel,array('code'=>$keyCode));
         $Tools = new Tools($db, $store_id, 1);
-        $rew = $Tools->verification_code($db,$arr);
+        $rew = $Tools->verification_code($db,$arr);*/
+        if($keyCode != '123456'){
+            echo json_encode(array('code'=>216,'message'=>'验证码是123456'));
+            exit;
+        }
+
 
         $wx_status = 0;
         // 根据商城id、手机号，查询用户信息
@@ -1355,9 +1365,13 @@ class loginAction extends Action {
         $tel = $request->getParameter('phone'); // 手机号码
         $keyCode = trim($request->getParameter('keyCode')); // 验证码
 
-        $arr = array($tel,array('code'=>$keyCode));
+        /*$arr = array($tel,array('code'=>$keyCode));
         $Tools = new Tools($db, $store_id, 1);
-        $rew = $Tools->verification_code($db,$arr);
+        $rew = $Tools->verification_code($db,$arr);*/
+        if($keyCode != '123456'){
+            echo json_encode(array('code'=>216,'message'=>'验证码是123456'));
+            exit;
+        }
 
         if($rew){
             $sql2 = "delete from lkt_session_id where id = '$rew' ";
